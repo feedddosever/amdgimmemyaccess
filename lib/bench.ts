@@ -60,10 +60,9 @@ function fixed(value: number | null, digits: number): string {
   return value === null ? "–" : value.toFixed(digits);
 }
 
-export function benchMarkdown(results: BenchResults): string {
+// The results table with its context lines; also written into README.md by the benchmark.
+export function benchSummary(results: BenchResults): string {
   const lines = [
-    `# MenuBridge benchmark`,
-    "",
     `${results.model} on ${results.gpu} (${results.server}), ${results.durationSec} s per level, run ${results.runAt}.`,
     `Prices: GPU $${fixed(results.gpuHourlyUsd, 2)}/h, ${fixed(results.eurPerUsd, 4)} EUR per USD. ` +
       `A menu view is ${results.callsPerView} personalize calls, ${fixed(results.tokensPerView, 0)} tokens; an order is ${fixed(results.tokensPerOrder, 0)} tokens.`,
@@ -79,9 +78,22 @@ export function benchMarkdown(results: BenchResults): string {
     ),
     "",
     `BENCH_TOKENS_PER_SEC=${fixed(results.benchTokensPerSec, 0)}`,
-    "",
   ];
   return lines.join("\n");
+}
+
+export function benchMarkdown(results: BenchResults): string {
+  return `# MenuBridge benchmark\n\n${benchSummary(results)}\n`;
+}
+
+// Replaces the text between <!-- bench:start --> and <!-- bench:end --> in a README.
+export function withBenchSection(readme: string, results: BenchResults): string {
+  const start = "<!-- bench:start -->";
+  const end = "<!-- bench:end -->";
+  const from = readme.indexOf(start);
+  const to = readme.indexOf(end);
+  if (from === -1 || to < from) return readme;
+  return `${readme.slice(0, from + start.length)}\n${benchSummary(results)}\n${readme.slice(to)}`;
 }
 
 export async function getBenchResults(): Promise<BenchResults | null> {

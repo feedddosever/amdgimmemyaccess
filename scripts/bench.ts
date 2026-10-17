@@ -4,15 +4,15 @@
 // Reads .env.local / .env. Writes bench/results.json and bench/results.md.
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { parseEnv } from "node:util";
 import type { ZodType } from "zod";
-import { type BenchLevel, type BenchResults, benchMarkdown, eurPer1000, percentile } from "@/lib/bench";
+import { type BenchLevel, type BenchResults, benchMarkdown, eurPer1000, percentile, withBenchSection } from "@/lib/bench";
 import { config } from "@/lib/config";
 import { LANGS } from "@/lib/i18n";
 import { GPU_NAME, complete, createClient, prepareRequest, validate } from "@/lib/llm";
 import { orderRequest } from "@/lib/order";
 import { personalizeRequest } from "@/lib/personalize";
 import { AUDIENCES, CATEGORIES, type DinerProfile, MenuSchema } from "@/lib/schema";
+import { loadEnvFiles } from "./env";
 
 // Two orders in each of it, en, de, fr, ja, zh.
 const ORDERS: { lang: DinerProfile["lang"]; text: string }[] = [
@@ -31,15 +31,6 @@ const ORDERS: { lang: DinerProfile["lang"]; text: string }[] = [
 ];
 
 type Sample = { task: string; ok: boolean; latencyMs: number; promptTokens: number; completionTokens: number; valid: boolean; error?: string };
-
-function loadEnvFiles() {
-  for (const file of [".env.local", ".env"]) {
-    if (!existsSync(file)) continue;
-    for (const [key, value] of Object.entries(parseEnv(readFileSync(file, "utf8")))) {
-      process.env[key] ??= value;
-    }
-  }
-}
 
 function parseArgs(argv: string[]) {
   const value = (name: string) => {
@@ -185,6 +176,10 @@ async function main() {
   writeFileSync(path.join(args.out, "results.md"), markdown);
   console.log(`\n${markdown}`);
   console.log(`Wrote ${path.join(args.out, "results.json")} and results.md.`);
+  if (args.out === "bench" && existsSync("README.md")) {
+    writeFileSync("README.md", withBenchSection(readFileSync("README.md", "utf8"), results));
+    console.log("Updated the benchmark table in README.md.");
+  }
   console.log(`Set BENCH_TOKENS_PER_SEC=${results.benchTokensPerSec} (throughput at concurrency ${reference?.concurrency}) in Vercel and .env.local.`);
   if (cfg.gpuHourlyUsd === null || cfg.eurPerUsd === null) console.log("Set GPU_HOURLY_USD and EUR_PER_USD to get the EUR columns.");
 }
