@@ -8,7 +8,7 @@ Built for the AMD Developer Hackathon ACT III (lablab.ai), track **Create a New 
 
 ## Demo
 
-- Live demo: **[add the Vercel URL]**
+- Live demo: **https://menubridge-nine.vercel.app** (mock answers until the GPU droplet is connected)
 - Video: **[add the video link]**
 - Try it: `/m/demo-trattoria?lang=ja&aud=first_timer` (Japanese first-timer), `/m/demo-trattoria?lang=en&aud=dietary&allergens=fish` (fish allergy), `/kitchen`, `/demo` (phone and kitchen side by side), `/metrics` (AMD panel), `/about` (how it works and track compliance).
 
@@ -80,7 +80,7 @@ Against the model: in `.env.local` set `MOCK_LLM=0`, `LLM_BASE_URL`, `LLM_API_KE
 1. Start the model on the droplet (vLLM with `--api-key`), and open only port 8000 in its firewall.
 2. Import this repository in Vercel and set the environment variables above, with `MOCK_LLM=0`.
 3. Run `npm run bench` and `npm run warm-cache` against the droplet, commit `bench/` and `data/cache`, and set `BENCH_TOKENS_PER_SEC`.
-4. Deploy, then run `npm run smoke -- https://your-app.vercel.app`.
+4. Deploy, then run `npm run smoke -- https://menubridge-nine.vercel.app`.
 5. When the GPU is switched off, the app serves the saved answers with the banner "GPU offline - showing results generated earlier on AMD Instinct MI300X".
 
 To add a restaurant: open `/admin/import`, paste its Italian menu, check the draft with the owner, download the JSON, commit it as `data/<id>.json`; the menu is then at `/m/<id>`.

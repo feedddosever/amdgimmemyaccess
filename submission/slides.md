@@ -6,7 +6,7 @@ Ten slides. Fill every double-bracket placeholder from `bench/results.md`, the A
 
 Order in your language. The kitchen gets it in theirs.
 
-[[QR code of the live URL]] · [[live URL]]
+[[QR code of https://menubridge-nine.vercel.app]] · https://menubridge-nine.vercel.app
 
 > Speaker notes: MenuBridge is a QR menu that rewrites itself for each diner and sends the kitchen a ticket in Italian. Everything you will see runs live on one AMD Instinct MI300X.
 
@@ -83,6 +83,6 @@ The menu is written for the person holding it: a first-timer gets what it is and
 
 ## 10. Thanks
 
-[[Your name]] · [[live URL]] · github.com/feedddosever/amdgimmemyaccess · [[video link]]
+[[Your name]] · https://menubridge-nine.vercel.app · github.com/feedddosever/amdgimmemyaccess · [[video link]]
 
 > Speaker notes: Try it now: scan the QR code on the first slide and order something Roman.

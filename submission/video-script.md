@@ -11,4 +11,4 @@ Under 4:30. Record `/demo` in a 1440×900 browser window; the live demo runs fro
 | 2:30–3:15 | `/about`: How it works, then Quality control with the live counters. | "Gemma writes, maps and translates. It can only name dishes that exist, every answer is validated, a claim guard blocks words like gluten-free, the owner approves every dish, and a waiter confirms every ticket." |
 | 3:15–3:45 | `/about`, benchmark chart and table. | "At realistic load, one GPU serves [[requests/s at concurrency 32]] requests a second: [[EUR per 1,000 menu views]] per thousand menu views." |
 | 3:45–4:15 | Business slide with the pilot restaurant. | "Restaurants pay a monthly subscription; diners install nothing. [[Pilot restaurant and the owner's quote.]]" |
-| 4:15–4:28 | Live URL, repository, thanks. | "Try it now at [[live URL]]. Order in your language; the kitchen gets it in theirs." |
+| 4:15–4:28 | Live URL, repository, thanks. | "Try it now at https://menubridge-nine.vercel.app. Order in your language; the kitchen gets it in theirs." |
