@@ -56,3 +56,13 @@ describe("mockOrder", () => {
     expect(output.clarifyingQuestion).toBeDefined();
   });
 });
+
+describe("mockOrder quantities", () => {
+  it("reads a quantity written after the dish name", () => {
+    const output = orderOutputSchema(menu).parse(mockOrder(menu, { lang: "ja" }, "カルボナーラを2つとティラミス"));
+    expect(output.items).toEqual([
+      { dishId: "carbonara", qty: 2 },
+      { dishId: "tiramisu", qty: 1 },
+    ]);
+  });
+});

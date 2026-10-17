@@ -97,3 +97,27 @@ export function checkDish(dish: Dish, profile: DinerProfile, menu: Menu): GateRe
 
   return { allowed: reasons.length === 0, reasons };
 }
+
+// Which ingredients bring each allergen into a dish, for the tappable chips.
+export function allergenSources(dish: Dish, menu: Menu): Partial<Record<AllergenCode, Ingredient[]>> {
+  const sources: Partial<Record<AllergenCode, Ingredient[]>> = {};
+  for (const ingredient of ingredientsOf(dish, menu).found) {
+    for (const code of ingredient.allergens) (sources[code] ??= []).push(ingredient);
+  }
+  return sources;
+}
+
+// Splits the menu for one diner: dishes they can order, and dishes the gate blocked with why.
+export function partitionMenu(menu: Menu, profile: DinerProfile): {
+  allowed: Dish[];
+  blocked: { dish: Dish; reasons: GateReason[] }[];
+} {
+  const allowed: Dish[] = [];
+  const blocked: { dish: Dish; reasons: GateReason[] }[] = [];
+  for (const dish of menu.dishes) {
+    const result = checkDish(dish, profile, menu);
+    if (result.allowed) allowed.push(dish);
+    else blocked.push({ dish, reasons: result.reasons });
+  }
+  return { allowed, blocked };
+}

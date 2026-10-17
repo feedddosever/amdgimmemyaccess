@@ -1,5 +1,5 @@
 import type { AllergenCode, DietCode } from "@/lib/allergens";
-import { type Lang, fillTemplate, ingredientName } from "@/lib/i18n";
+import { type Lang, childAge, fillTemplate, ingredientName, mentionsChild } from "@/lib/i18n";
 import type { DinerProfile, Dish, Menu } from "@/lib/schema";
 import type { OrderOutput, PersonalizeOutput } from "@/lib/tasks";
 
@@ -143,7 +143,6 @@ export function mockPersonalize(menu: Menu, dishes: Dish[], profile: Pick<DinerP
 // Keyword cues for the order mock, across the 8 UI languages. Lowercase. Any
 // mention of pork counts as "no pork": in an order it is almost always an exclusion.
 const ROMAN = ["roman", "rome", "romano", "romana", "römisch", "romain", "ローマ", "罗马", "римск"];
-const CHILD = ["child", "kid", "my son", "daughter", "bambin", "figli", "mein kind", "unser kind", "kinder", "sohn", "tochter", "enfant", "fils", "fille", "niño", "niña", "hijo", "hija", "子ども", "子供", "こども", "息子", "娘", "孩子", "儿子", "女儿", "ребен", "ребён", "сын", "доч"];
 const ALLERGY = ["allerg", "アレルギー", "过敏", "аллерг", "celiac", "celiach", "zöliak", "cœliaque", "celíac"];
 const DIET_CUES: Record<DietCode, string[]> = {
   no_pork: ["pork", "maiale", "schwein", "porc", "cerdo", "豚", "猪肉", "свинин"],
@@ -214,7 +213,10 @@ export function mockOrder(menu: Menu, profile: Pick<DinerProfile, "lang">, text:
     for (const alias of aliases) {
       const index = lower.indexOf(alias);
       if (index === -1) continue;
-      const qty = Number(lower.slice(Math.max(0, index - 4), index).match(/(\d{1,2})\s*x?\s*$/)?.[1] ?? 1);
+      // "2 carbonara", "2x carbonara" or "カルボナーラを2つ" / "carbonara x2".
+      const before = lower.slice(Math.max(0, index - 4), index).match(/(\d{1,2})\s*x?\s*$/)?.[1];
+      const after = lower.slice(index + alias.length, index + alias.length + 6).match(/^\s*(?:を|x|×)?\s*(\d{1,2})/)?.[1];
+      const qty = Number(before ?? after ?? 1);
       add(dishId, { qty: Math.min(Math.max(qty, 1), 10) });
       break;
     }
@@ -226,8 +228,8 @@ export function mockOrder(menu: Menu, profile: Pick<DinerProfile, "lang">, text:
     if (primo) add(primo.id);
   }
 
-  if (mentions(lower, CHILD)) {
-    const age = lower.match(/(\d{1,2})\s*(?:-?\s*year|歳|anni|jahre|ans|años|岁|лет|год)/)?.[1];
+  if (mentionsChild(lower)) {
+    const age = childAge(lower);
     const forWhom = age ? `${CHILD_LABEL[profile.lang]} (${age})` : CHILD_LABEL[profile.lang];
     const kidsDish = menu.dishes.find(
       (dish) => dish.kidFriendly && dish.category === "primi" && !items.some((item) => item.dishId === dish.id),
