@@ -1,6 +1,7 @@
-import type { AllergenCode, DietCode } from "@/lib/allergens";
+import type { AllergenCode, DietCode, TagCode } from "@/lib/allergens";
 import { type Lang, childAge, fillTemplate, ingredientName, mentionsChild } from "@/lib/i18n";
-import type { DinerProfile, Dish, Menu } from "@/lib/schema";
+import { type DraftIngredient, type MenuDraft, slugify, uniqueId } from "@/lib/menuDraft";
+import type { Category, DinerProfile, Dish, Menu } from "@/lib/schema";
 import type { OrderOutput, PersonalizeOutput } from "@/lib/tasks";
 
 // Canned model answers for MOCK_LLM=1. Like the real prompts, they describe
@@ -249,4 +250,91 @@ export function mockOrder(menu: Menu, profile: Pick<DinerProfile, "lang">, text:
     unmatchedRequests: understood ? [] : [text.slice(0, 200)],
     ...(understood ? {} : { clarifyingQuestion: CLARIFY[profile.lang] }),
   };
+}
+
+// Menu import: reads lines like "Carbonara (guanciale, uovo, pecorino) 13" under
+// section headers, and suggests allergens from Italian ingredient names. The real
+// model does this better; either way the owner confirms every dish.
+const SECTION_CUES: Record<Category, string[]> = {
+  antipasti: ["antipast"],
+  primi: ["primi", "primo"],
+  secondi: ["secondi", "secondo", "pizz"],
+  contorni: ["contorn"],
+  dolci: ["dolci", "dessert"],
+};
+const INGREDIENT_FACTS: { cues: string[]; allergens?: AllergenCode[]; tags?: TagCode[] }[] = [
+  { cues: ["farina", "pane", "pasta", "spaghetti", "fettuccine", "rigatoni", "tonnarelli", "penne", "bucatini", "gnocchi", "pangrattato", "biscott", "grano", "orzo"], allergens: ["gluten"] },
+  { cues: ["uovo", "uova", "tuorl", "maionese"], allergens: ["eggs"] },
+  { cues: ["savoiardi"], allergens: ["gluten", "eggs"] },
+  { cues: ["latte", "burro", "panna", "mozzarella", "pecorino", "parmigiano", "ricotta", "mascarpone", "formaggi", "burrata", "provola", "scamorza", "gorgonzola", "besciamella"], allergens: ["milk"] },
+  { cues: ["alici", "acciugh", "tonno", "baccal", "pesce", "salmone", "merluzzo", "orata", "spigola", "branzino", "sardin"], allergens: ["fish"], tags: ["fish_seafood"] },
+  { cues: ["gamber", "scampi", "aragost", "astice", "granchi"], allergens: ["crustaceans"], tags: ["fish_seafood"] },
+  { cues: ["vongol", "cozz", "calamar", "polp", "seppi", "totan", "ostric"], allergens: ["molluscs"], tags: ["fish_seafood"] },
+  { cues: ["sedano"], allergens: ["celery"] },
+  { cues: ["vino", "marsala"], allergens: ["sulphites"], tags: ["alcohol"] },
+  { cues: ["aceto"], allergens: ["sulphites"] },
+  { cues: ["noci", "nocciol", "pistacch", "mandorl", "anacard"], allergens: ["nuts"] },
+  { cues: ["arachid"], allergens: ["peanuts"] },
+  { cues: ["sesamo"], allergens: ["sesame"] },
+  { cues: ["senape"], allergens: ["mustard"] },
+  { cues: ["soia"], allergens: ["soy"] },
+  { cues: ["lupin"], allergens: ["lupin"] },
+  { cues: ["guanciale", "pancetta", "prosciutto", "salsicc", "maiale", "lardo", "porchetta", "mortadella", "salame", "speck", "gelatina"], tags: ["pork", "meat"] },
+  { cues: ["manzo", "bue", "bovin", "bresaola"], tags: ["beef", "meat"] },
+  { cues: ["vitello"], tags: ["veal", "meat"] },
+  { cues: ["agnello", "abbacchio"], tags: ["lamb", "meat"] },
+  { cues: ["pollo", "tacchino", "anatra", "faraona"], tags: ["poultry", "meat"] },
+];
+const PRICE = /(?:€\s*)?(\d{1,3}(?:[.,]\d{1,2})?)\s*(?:€|eur|euro)?\s*$/i;
+
+function suggestFacts(name: string): Pick<DraftIngredient, "allergens" | "tags"> {
+  const lower = name.toLowerCase();
+  const allergens = new Set<AllergenCode>();
+  const tags = new Set<TagCode>();
+  for (const fact of INGREDIENT_FACTS) {
+    if (!fact.cues.some((cue) => lower.includes(cue))) continue;
+    fact.allergens?.forEach((code) => allergens.add(code));
+    fact.tags?.forEach((tag) => tags.add(tag));
+  }
+  return { allergens: [...allergens], tags: [...tags] };
+}
+
+export function mockMenuDraft(text: string): MenuDraft {
+  let category: Category = "secondi";
+  const ingredients = new Map<string, DraftIngredient>();
+  const dishes: MenuDraft["dishes"] = [];
+
+  for (const raw of text.split("\n")) {
+    const line = raw.trim();
+    if (!line) continue;
+    const price = line.match(PRICE);
+    if (!price && !line.includes("(")) {
+      const header = line.toLowerCase();
+      const section = (Object.keys(SECTION_CUES) as Category[]).find((key) => SECTION_CUES[key].some((cue) => header.startsWith(cue)));
+      if (section) category = section;
+      continue;
+    }
+    const body = (price ? line.slice(0, price.index) : line).trim().replace(/[\s.:–—-]+$/, "");
+    const parts = body.match(/^([^(:–—]+?)\s*(?:\((.*)\)|[:–—]\s*(.*))?$/);
+    const name = (parts?.[1] ?? body).trim();
+    if (!name) continue;
+    const listed = (parts?.[2] ?? parts?.[3] ?? "")
+      .split(/,|\se\s|\scon\s/)
+      .map((item) => item.trim())
+      .filter(Boolean);
+    const ingredientIds = listed.map((item) => {
+      const id = slugify(item) || uniqueId(item, ingredients.keys());
+      if (!ingredients.has(id)) ingredients.set(id, { id, it: item, en: item, ...suggestFacts(item) });
+      return id;
+    });
+    dishes.push({
+      id: uniqueId(name, dishes.map((dish) => dish.id)),
+      category,
+      nameIt: name,
+      descriptionIt: listed.length ? `${name} con ${listed.join(", ")}.` : `${name}.`,
+      priceEur: price ? Number(price[1].replace(",", ".")) || null : null,
+      ingredientIds: [...new Set(ingredientIds)],
+    });
+  }
+  return { ingredients: [...ingredients.values()], dishes };
 }

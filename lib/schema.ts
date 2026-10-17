@@ -3,7 +3,7 @@ import { ALLERGEN_CODES, DIET_CODES, TAG_CODES } from "@/lib/allergens";
 import { LANGS } from "@/lib/i18n";
 
 // Lowercase ids, safe in URLs and as JSON-schema enum values.
-const Id = z.string().regex(/^[a-z0-9][a-z0-9_-]*$/);
+export const Id = z.string().regex(/^[a-z0-9][a-z0-9_-]*$/);
 
 export const CATEGORIES = ["antipasti", "primi", "secondi", "contorni", "dolci"] as const;
 export const AUDIENCES = ["first_timer", "foodie", "family", "dietary"] as const;

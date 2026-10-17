@@ -166,7 +166,7 @@ export default function DinerApp({ menu }: { menu: Menu }) {
     <div className="mx-auto flex min-h-screen w-full max-w-[430px] flex-col" lang={lang}>
       <header className="sticky top-0 z-20 flex items-center justify-between gap-3 border-b border-line bg-paper/95 px-4 py-3 backdrop-blur">
         <div>
-          <p className="text-lg font-semibold leading-tight">{menu.restaurant.name}</p>
+          <h1 className="text-lg font-semibold leading-tight">{menu.restaurant.name}</h1>
           <p className="text-sm text-muted">{t(lang, "table", { table })}</p>
         </div>
         <button
@@ -256,9 +256,7 @@ export default function DinerApp({ menu }: { menu: Menu }) {
         ) : (
           <>
             {menu.restaurant.demoData && (
-              <p className="rounded-xl bg-white p-3 text-sm text-muted ring-1 ring-line" lang="en">
-                Demo menu: recipes vary; each restaurant approves its own ingredient sheet.
-              </p>
+              <p className="rounded-xl bg-white p-3 text-sm text-muted ring-1 ring-line">{t(lang, "demoBanner")}</p>
             )}
             {CATEGORIES.map((category) => {
               const dishes = allowed.filter((dish) => dish.category === category);

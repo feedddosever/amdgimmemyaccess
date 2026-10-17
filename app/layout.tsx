@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { AmdDrawerLoader } from "@/components/amd/Loaders";
+import { AmdDrawerLoader } from "@/components/Loaders";
 import "./globals.css";
 
 const geistSans = Geist({

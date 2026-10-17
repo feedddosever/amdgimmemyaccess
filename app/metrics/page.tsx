@@ -1,4 +1,4 @@
-import { AmdPanelLoader } from "@/components/amd/Loaders";
+import { AmdPanelLoader } from "@/components/Loaders";
 
 export const metadata = { title: "AMD panel – MenuBridge" };
 

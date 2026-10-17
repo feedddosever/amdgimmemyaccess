@@ -53,14 +53,14 @@ export default function DishCard({ dish, menu, lang, copy, inCart, onAdd }: Prop
       {dish.ownerApproved ? (
         allergens.length > 0 && (
           <div className="mt-3">
-            <ul className="flex flex-wrap gap-1.5">
+            <ul className="flex flex-wrap gap-x-1.5 gap-y-3">
               {allergens.map((code) => (
                 <li key={code}>
                   <button
                     type="button"
                     aria-expanded={openChip === code}
                     onClick={() => setOpenChip(openChip === code ? null : code)}
-                    className="min-h-8 rounded-full bg-amber-50 px-3 py-1 text-sm text-amber-900 ring-1 ring-amber-200 focus-visible:outline-2 focus-visible:outline-terracotta"
+                    className="relative min-h-8 rounded-full bg-amber-50 px-3 py-1 text-sm text-amber-900 ring-1 ring-amber-200 after:absolute after:inset-x-0 after:-inset-y-1.5 focus-visible:outline-2 focus-visible:outline-terracotta"
                   >
                     {ALLERGEN_NAMES[code][lang]}
                   </button>

@@ -194,6 +194,7 @@ const UI_EN = {
   orderUnavailable: "We can't read your order right now. Tap Add on the dishes you want, or ask the staff.",
   table: "Table {table}",
   remove: "Remove",
+  demoBanner: "Demo menu: recipes vary; each restaurant approves its own ingredient sheet.",
 };
 
 export type UIKey = keyof typeof UI_EN;
@@ -248,6 +249,7 @@ export const UI: Record<Lang, Record<UIKey, string>> = {
     orderUnavailable: "Al momento non riusciamo a leggere l'ordine. Tocca Aggiungi sui piatti che desideri o chiedi al personale.",
     table: "Tavolo {table}",
     remove: "Togli",
+    demoBanner: "Menu dimostrativo: le ricette variano; ogni ristorante approva la propria scheda ingredienti.",
   },
   de: {
     welcomeTitle: "Willkommen bei {restaurant}",
@@ -297,6 +299,7 @@ export const UI: Record<Lang, Record<UIKey, string>> = {
     orderUnavailable: "Wir können Ihre Bestellung gerade nicht lesen. Tippen Sie bei den gewünschten Gerichten auf Hinzufügen oder fragen Sie das Personal.",
     table: "Tisch {table}",
     remove: "Entfernen",
+    demoBanner: "Demo-Speisekarte: Rezepte variieren; jedes Restaurant gibt sein eigenes Zutatenblatt frei.",
   },
   fr: {
     welcomeTitle: "Bienvenue chez {restaurant}",
@@ -346,6 +349,7 @@ export const UI: Record<Lang, Record<UIKey, string>> = {
     orderUnavailable: "Nous ne pouvons pas lire votre commande pour le moment. Touchez Ajouter sur les plats souhaités ou demandez au personnel.",
     table: "Table {table}",
     remove: "Retirer",
+    demoBanner: "Menu de démonstration : les recettes varient ; chaque restaurant valide sa propre fiche ingrédients.",
   },
   es: {
     welcomeTitle: "Te damos la bienvenida a {restaurant}",
@@ -395,6 +399,7 @@ export const UI: Record<Lang, Record<UIKey, string>> = {
     orderUnavailable: "Ahora no podemos leer tu pedido. Toca Añadir en los platos que quieras o pregunta al personal.",
     table: "Mesa {table}",
     remove: "Quitar",
+    demoBanner: "Carta de demostración: las recetas varían; cada restaurante aprueba su propia ficha de ingredientes.",
   },
   ja: {
     welcomeTitle: "{restaurant}へようこそ",
@@ -444,6 +449,7 @@ export const UI: Record<Lang, Record<UIKey, string>> = {
     orderUnavailable: "現在ご注文を読み取れません。ご希望の料理の「追加」をタップするか、スタッフにお尋ねください。",
     table: "テーブル {table}",
     remove: "削除",
+    demoBanner: "デモ用メニューです。レシピは店によって異なり、各レストランが自店の食材表を承認します。",
   },
   zh: {
     welcomeTitle: "欢迎光临{restaurant}",
@@ -493,6 +499,7 @@ export const UI: Record<Lang, Record<UIKey, string>> = {
     orderUnavailable: "目前无法读取您的点单。请点击想要的菜品上的“添加”，或咨询服务员。",
     table: "{table} 号桌",
     remove: "移除",
+    demoBanner: "演示菜单：各家做法不同，每家餐厅都会审核自己的食材表。",
   },
   ru: {
     welcomeTitle: "Добро пожаловать в {restaurant}",
@@ -542,6 +549,7 @@ export const UI: Record<Lang, Record<UIKey, string>> = {
     orderUnavailable: "Сейчас мы не можем прочитать ваш заказ. Нажмите «Добавить» у нужных блюд или спросите персонал.",
     table: "Столик {table}",
     remove: "Убрать",
+    demoBanner: "Демо-меню: рецепты различаются; каждый ресторан утверждает свой лист ингредиентов.",
   },
 };
 
