@@ -22,7 +22,7 @@ Next.js App Router, TypeScript strict, Tailwind, npm. `openai` npm package again
 Next.js 16 differs from older versions (Cache Components are on): follow @AGENTS.md and read the matching guide in node_modules/next/dist/docs/ before writing Next.js code.
 
 ## Conventions
-- Typed modules in /lib; API routes in /app/api/*/route.ts with `export const maxDuration = 60` and `export const runtime = "nodejs"`.
+- Typed modules in /lib; API routes in /app/api/*/route.ts with `export const maxDuration = 60`. No `runtime` export: Cache Components rejects it, and Node.js is already the default. A GET handler that must run per request calls `await connection()` (from next/server) first.
 - UI strings in /lib/i18n.ts for it, en, de, fr, es, ja, zh, ru. Gate reasons come from i18n templates, never from the model.
 - Diner UI mobile-first (max width 430 px); kitchen view desktop.
 - Wrap every localStorage access in try/catch.
