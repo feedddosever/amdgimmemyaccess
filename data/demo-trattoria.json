@@ -1,0 +1,165 @@
+{
+  "restaurant": { "id": "demo-trattoria", "name": "Trattoria Demo", "city": "Roma", "demoData": true },
+  "ingredients": [
+    { "id": "rice", "name": { "it": "riso", "en": "rice" }, "allergens": [], "tags": [] },
+    { "id": "tomato", "name": { "it": "pomodoro", "en": "tomato" }, "allergens": [], "tags": [] },
+    { "id": "minced_beef", "name": { "it": "carne macinata di manzo", "en": "minced beef" }, "allergens": [], "tags": ["beef", "meat"] },
+    { "id": "mozzarella", "name": { "it": "mozzarella", "en": "mozzarella cheese" }, "allergens": ["milk"], "tags": [] },
+    { "id": "egg", "name": { "it": "uovo", "en": "egg" }, "allergens": ["eggs"], "tags": [] },
+    { "id": "breadcrumbs", "name": { "it": "pangrattato", "en": "breadcrumbs" }, "allergens": ["gluten"], "tags": [] },
+    { "id": "artichoke", "name": { "it": "carciofo romanesco", "en": "Roman artichoke" }, "allergens": [], "tags": [] },
+    { "id": "olive_oil", "name": { "it": "olio extravergine d'oliva", "en": "extra virgin olive oil" }, "allergens": [], "tags": [] },
+    { "id": "chicory", "name": { "it": "cicoria", "en": "chicory" }, "allergens": [], "tags": [] },
+    { "id": "anchovy", "name": { "it": "alici", "en": "anchovies" }, "allergens": ["fish"], "tags": ["fish_seafood"] },
+    { "id": "garlic", "name": { "it": "aglio", "en": "garlic" }, "allergens": [], "tags": [] },
+    { "id": "white_wine_vinegar", "name": { "it": "aceto di vino bianco", "en": "white wine vinegar" }, "allergens": ["sulphites"], "tags": [] },
+    { "id": "spaghetti", "name": { "it": "spaghetti di grano duro", "en": "durum wheat spaghetti" }, "allergens": ["gluten"], "tags": [] },
+    { "id": "guanciale", "name": { "it": "guanciale", "en": "cured pork cheek" }, "allergens": [], "tags": ["pork", "meat"] },
+    { "id": "egg_yolk", "name": { "it": "tuorlo d'uovo", "en": "egg yolk" }, "allergens": ["eggs"], "tags": [] },
+    { "id": "pecorino", "name": { "it": "pecorino romano", "en": "pecorino romano cheese" }, "allergens": ["milk"], "tags": [] },
+    { "id": "black_pepper", "name": { "it": "pepe nero", "en": "black pepper" }, "allergens": [], "tags": [] },
+    { "id": "tonnarelli", "name": { "it": "tonnarelli di grano duro", "en": "durum wheat tonnarelli" }, "allergens": ["gluten"], "tags": [] },
+    { "id": "rigatoni", "name": { "it": "rigatoni di grano duro", "en": "durum wheat rigatoni" }, "allergens": ["gluten"], "tags": [] },
+    { "id": "white_wine", "name": { "it": "vino bianco", "en": "white wine" }, "allergens": ["sulphites"], "tags": ["alcohol"] },
+    { "id": "veal", "name": { "it": "fettine di vitello", "en": "veal escalopes" }, "allergens": [], "tags": ["veal", "meat"] },
+    { "id": "prosciutto_crudo", "name": { "it": "prosciutto crudo", "en": "cured ham (prosciutto)" }, "allergens": [], "tags": ["pork", "meat"] },
+    { "id": "sage", "name": { "it": "salvia", "en": "sage" }, "allergens": [], "tags": [] },
+    { "id": "butter", "name": { "it": "burro", "en": "butter" }, "allergens": ["milk"], "tags": [] },
+    { "id": "flour", "name": { "it": "farina di grano tenero", "en": "wheat flour" }, "allergens": ["gluten"], "tags": [] },
+    { "id": "oxtail", "name": { "it": "coda di bue", "en": "oxtail" }, "allergens": [], "tags": ["beef", "meat"] },
+    { "id": "celery", "name": { "it": "sedano", "en": "celery" }, "allergens": ["celery"], "tags": [] },
+    { "id": "onion", "name": { "it": "cipolla", "en": "onion" }, "allergens": [], "tags": [] },
+    { "id": "red_wine", "name": { "it": "vino rosso", "en": "red wine" }, "allergens": ["sulphites"], "tags": ["alcohol"] },
+    { "id": "lamb", "name": { "it": "costolette d'agnello", "en": "lamb chops" }, "allergens": [], "tags": ["lamb", "meat"] },
+    { "id": "rosemary", "name": { "it": "rosmarino", "en": "rosemary" }, "allergens": [], "tags": [] },
+    { "id": "chilli", "name": { "it": "peperoncino", "en": "chilli" }, "allergens": [], "tags": [] },
+    { "id": "mascarpone", "name": { "it": "mascarpone", "en": "mascarpone cheese" }, "allergens": ["milk"], "tags": [] },
+    { "id": "savoiardi", "name": { "it": "savoiardi", "en": "ladyfinger biscuits" }, "allergens": ["gluten", "eggs"], "tags": [] },
+    { "id": "coffee", "name": { "it": "caffè espresso", "en": "espresso coffee" }, "allergens": [], "tags": [] },
+    { "id": "cocoa", "name": { "it": "cacao amaro", "en": "unsweetened cocoa" }, "allergens": [], "tags": [] },
+    { "id": "sugar", "name": { "it": "zucchero", "en": "sugar" }, "allergens": [], "tags": [] }
+  ],
+  "dishes": [
+    {
+      "id": "suppli",
+      "category": "antipasti",
+      "nameIt": "Supplì",
+      "descriptionIt": "Crocchetta di riso al sugo di pomodoro e carne di manzo, con cuore di mozzarella filante, passata nell'uovo e nel pangrattato e fritta.",
+      "priceEur": 3.5,
+      "ingredientIds": ["rice", "tomato", "minced_beef", "mozzarella", "egg", "breadcrumbs"],
+      "ownerApproved": true,
+      "kidFriendly": true
+    },
+    {
+      "id": "carciofi_alla_giudia",
+      "category": "antipasti",
+      "nameIt": "Carciofi alla giudia",
+      "descriptionIt": "Carciofo romanesco fritto intero in olio d'oliva fino a diventare croccante come un fiore, ricetta del Ghetto ebraico di Roma.",
+      "priceEur": 8,
+      "ingredientIds": ["artichoke", "olive_oil"],
+      "ownerApproved": true
+    },
+    {
+      "id": "puntarelle",
+      "category": "antipasti",
+      "nameIt": "Puntarelle alla romana",
+      "descriptionIt": "Germogli di cicoria catalogna tagliati sottili e conditi con salsa di alici, aglio, aceto e olio.",
+      "priceEur": 7,
+      "ingredientIds": ["chicory", "anchovy", "garlic", "white_wine_vinegar", "olive_oil"],
+      "ownerApproved": true
+    },
+    {
+      "id": "carbonara",
+      "category": "primi",
+      "nameIt": "Spaghetti alla carbonara",
+      "descriptionIt": "Spaghetti con guanciale croccante, tuorlo e pecorino romano.",
+      "priceEur": 13,
+      "ingredientIds": ["spaghetti", "guanciale", "egg_yolk", "pecorino", "black_pepper"],
+      "ownerApproved": true,
+      "kidFriendly": true
+    },
+    {
+      "id": "cacio_e_pepe",
+      "category": "primi",
+      "nameIt": "Tonnarelli cacio e pepe",
+      "descriptionIt": "Tonnarelli mantecati con pecorino romano e pepe nero macinato al momento.",
+      "priceEur": 12,
+      "ingredientIds": ["tonnarelli", "pecorino", "black_pepper"],
+      "ownerApproved": true,
+      "kidFriendly": true
+    },
+    {
+      "id": "amatriciana",
+      "category": "primi",
+      "nameIt": "Rigatoni all'amatriciana",
+      "descriptionIt": "Rigatoni con sugo di pomodoro, guanciale sfumato al vino bianco e pecorino romano.",
+      "priceEur": 12,
+      "ingredientIds": ["rigatoni", "guanciale", "tomato", "pecorino", "white_wine"],
+      "ownerApproved": true
+    },
+    {
+      "id": "gricia",
+      "category": "primi",
+      "nameIt": "Pasta alla gricia",
+      "descriptionIt": "Rigatoni con guanciale croccante, pecorino romano e pepe nero.",
+      "priceEur": 12,
+      "ingredientIds": ["rigatoni", "guanciale", "pecorino", "black_pepper"],
+      "ownerApproved": true,
+      "kidFriendly": true
+    },
+    {
+      "id": "saltimbocca",
+      "category": "secondi",
+      "nameIt": "Saltimbocca alla romana",
+      "descriptionIt": "Fettine di vitello infarinate con prosciutto crudo e salvia, cotte nel burro e sfumate al vino bianco.",
+      "priceEur": 16,
+      "ingredientIds": ["veal", "prosciutto_crudo", "sage", "butter", "white_wine", "flour"],
+      "ownerApproved": true
+    },
+    {
+      "id": "coda_alla_vaccinara",
+      "category": "secondi",
+      "nameIt": "Coda alla vaccinara",
+      "descriptionIt": "Coda di bue stufata a lungo con pomodoro, sedano, cipolla e vino rosso.",
+      "priceEur": 18,
+      "ingredientIds": ["oxtail", "celery", "tomato", "onion", "red_wine"],
+      "ownerApproved": true
+    },
+    {
+      "id": "abbacchio_scottadito",
+      "category": "secondi",
+      "nameIt": "Abbacchio a scottadito",
+      "descriptionIt": "Costolette di agnello alla griglia con rosmarino e olio, da mangiare con le mani.",
+      "priceEur": 19,
+      "ingredientIds": ["lamb", "rosemary", "olive_oil"],
+      "ownerApproved": true
+    },
+    {
+      "id": "piatto_del_giorno",
+      "category": "secondi",
+      "nameIt": "Piatto del giorno",
+      "descriptionIt": "Il piatto del giorno secondo il mercato: chiedete al personale.",
+      "priceEur": 15,
+      "ingredientIds": [],
+      "ownerApproved": false
+    },
+    {
+      "id": "cicoria_ripassata",
+      "category": "contorni",
+      "nameIt": "Cicoria ripassata",
+      "descriptionIt": "Cicoria lessata e ripassata in padella con aglio, olio e peperoncino.",
+      "priceEur": 6,
+      "ingredientIds": ["chicory", "garlic", "chilli", "olive_oil"],
+      "ownerApproved": true
+    },
+    {
+      "id": "tiramisu",
+      "category": "dolci",
+      "nameIt": "Tiramisù",
+      "descriptionIt": "Savoiardi inzuppati nel caffè, crema di mascarpone e uova, cacao amaro.",
+      "priceEur": 7,
+      "ingredientIds": ["mascarpone", "egg", "savoiardi", "coffee", "cocoa", "sugar"],
+      "ownerApproved": true
+    }
+  ]
+}
