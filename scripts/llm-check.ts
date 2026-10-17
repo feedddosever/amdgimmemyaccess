@@ -30,7 +30,7 @@ async function listModels(baseURL: string, apiKey: string): Promise<string[]> {
 
 // Small raw requests, one per way the app can ask for JSON, so an endpoint's own error
 // message shows here instead of being turned into the app's safe fallback.
-async function probeChat(baseURL: string, apiKey: string, model: string) {
+async function probeChat(baseURL: string, apiKey: string, model: string): Promise<number[]> {
   const schema = { type: "object", properties: { ok: { type: "boolean" } }, required: ["ok"], additionalProperties: false };
   const system = { role: "system", content: 'Reply with one JSON object only: {"ok": true}' };
   const user = { role: "user", content: "Are you there?" };
@@ -40,6 +40,7 @@ async function probeChat(baseURL: string, apiKey: string, model: string) {
     ["vLLM structured_outputs", { messages: [system, user], structured_outputs: { json: schema } }],
     ["no system message", { messages: [{ role: "user", content: `${system.content}\n\n${user.content}` }] }],
   ];
+  const statuses: number[] = [];
   for (const [name, extra] of variants) {
     const startedAt = Date.now();
     try {
@@ -49,6 +50,7 @@ async function probeChat(baseURL: string, apiKey: string, model: string) {
         body: JSON.stringify({ model, max_tokens: 50, ...extra }),
         signal: AbortSignal.timeout(45_000),
       });
+      statuses.push(response.status);
       const text = await response.text();
       let detail = text;
       try {
@@ -62,6 +64,7 @@ async function probeChat(baseURL: string, apiKey: string, model: string) {
       console.log(`  ${name}: no response (${error instanceof Error ? error.message : error})`);
     }
   }
+  return statuses;
 }
 
 const describe = (call: LLMMeta) =>
@@ -77,7 +80,8 @@ async function main() {
   }
   console.log(`Endpoint: ${cfg.baseURL}`);
   const models = await listModels(cfg.baseURL, cfg.apiKey);
-  console.log(`Key accepted. ${models.length} models served:`);
+  // Some gateways list their models without checking the key: the chat requests below are the real test.
+  console.log(`Model list loaded: ${models.length} models.`);
   for (const id of models) console.log(`  ${id}${id === cfg.model ? "   <- LLM_MODEL" : /gemma/i.test(id) ? "   <- Gemma" : ""}`);
   if (!models.includes(cfg.model)) {
     console.error(`\nLLM_MODEL=${cfg.model} is not served here. Set LLM_MODEL to one of the IDs above (a Gemma one if listed) and run again.`);
@@ -85,7 +89,11 @@ async function main() {
   }
 
   console.log("\nRaw requests:");
-  await probeChat(cfg.baseURL, cfg.apiKey, cfg.model);
+  const statuses = await probeChat(cfg.baseURL, cfg.apiKey, cfg.model);
+  if (statuses.length > 0 && statuses.every((status) => status === 401 || status === 403)) {
+    console.error("\nThe endpoint rejected the key for chat requests. The key is for another endpoint, or no longer valid.");
+    process.exit(1);
+  }
 
   // The rest goes through the app's own code, against the live model.
   process.env.MOCK_LLM = "0";
