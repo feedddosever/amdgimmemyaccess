@@ -57,8 +57,9 @@ export default function DinerApp({ menu }: { menu: Menu }) {
 
   // One personalize request per language and audience; results are kept, so switching back is instant.
   useEffect(() => {
-    if (!key || !lang || !audience || requested.current.has(key)) return;
+    if (!key || !lang || !audience || !profile || requested.current.has(key)) return;
     requested.current.add(key);
+    const gateBlocked = partitionMenu(menu, profile).blocked.length;
     fetch("/api/personalize", {
       method: "POST",
       headers: { "content-type": "application/json" },
@@ -68,13 +69,14 @@ export default function DinerApp({ menu }: { menu: Menu }) {
       .then((data) => {
         setCopies((current) => ({ ...current, [key]: data }));
         if (data.meta) setFooterMeta(data.meta);
-        recordMetas(data.calls);
+        const viewId = crypto.randomUUID().slice(0, 8);
+        recordMetas(data.calls.map((call, i) => ({ ...call, viewId, ...(i === 0 ? { gateBlocked } : {}) })));
       })
       .catch(() => {
         requested.current.delete(key);
         setCopies((current) => ({ ...current, [key]: "error" }));
       });
-  }, [key, lang, audience, menu.restaurant.id]);
+  }, [key, lang, audience, profile, menu]);
 
   // The waiter's choice in the kitchen comes back as a status line.
   useEffect(
@@ -129,7 +131,7 @@ export default function DinerApp({ menu }: { menu: Menu }) {
       setLastOrder(result);
       if (meta) {
         setFooterMeta(meta);
-        recordMetas([meta]);
+        recordMetas([{ ...meta, gateBlocked: result.removed.length }]);
       }
     } catch {
       setLastOrder({ profile, items: [], removed: [], unmatchedRequests: [], clarifyingQuestion: t(profile.lang, "orderUnavailable") });

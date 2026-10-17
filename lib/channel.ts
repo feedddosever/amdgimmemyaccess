@@ -1,4 +1,4 @@
-import type { LLMMeta } from "@/lib/llm";
+import type { PanelEntry } from "@/lib/panel";
 import type { Ticket, TicketStatus } from "@/lib/ticket";
 
 // Browser-only: orders move between tabs (diner phone, kitchen, demo screen)
@@ -7,7 +7,7 @@ import type { Ticket, TicketStatus } from "@/lib/ticket";
 export type ChannelMessage =
   | { type: "ticket"; ticket: Ticket }
   | { type: "status"; ticketId: string; status: TicketStatus }
-  | { type: "meta"; metas: LLMMeta[] };
+  | { type: "meta"; metas: PanelEntry[] };
 
 const CHANNEL_NAME = "menubridge";
 const TICKETS_KEY = "menubridge:tickets";
@@ -82,14 +82,20 @@ export function clearTickets() {
   writeJSON(TICKETS_KEY, []);
 }
 
-export function loadMetaLog(): LLMMeta[] {
+export function loadMetaLog(): PanelEntry[] {
   const metas = readJSON<unknown>(META_KEY, []);
-  return Array.isArray(metas) ? (metas as LLMMeta[]) : [];
+  return Array.isArray(metas) ? (metas as PanelEntry[]) : [];
+}
+
+export function clearMetaLog() {
+  writeJSON(META_KEY, []);
 }
 
 // Every model call's meta goes to the session log for the AMD panel.
-export function recordMetas(metas: LLMMeta[]) {
-  if (metas.length === 0) return;
+export function recordMetas(entries: PanelEntry[]) {
+  if (entries.length === 0) return;
+  const at = new Date().toISOString();
+  const metas = entries.map((entry) => ({ ...entry, at }));
   writeJSON(META_KEY, [...loadMetaLog(), ...metas].slice(-MAX_METAS));
   publish({ type: "meta", metas });
 }

@@ -6,6 +6,7 @@ export function config() {
     baseURL: (env.LLM_BASE_URL ?? "").replace(/\/+$/, ""),
     apiKey: env.LLM_API_KEY ?? "",
     model: env.LLM_MODEL || "google/gemma-4-26B-A4B-it",
+    metricsURL: env.LLM_METRICS_URL ?? "",
     gpuHourlyUsd: positiveNumber(env.GPU_HOURLY_USD),
     eurPerUsd: positiveNumber(env.EUR_PER_USD),
     benchTokensPerSec: positiveNumber(env.BENCH_TOKENS_PER_SEC),

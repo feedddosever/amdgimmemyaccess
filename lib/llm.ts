@@ -19,6 +19,8 @@ export type LLMMeta = {
   gpu: typeof GPU_NAME;
   // Replies rejected by zod validation before the accepted one (0 or 1).
   validationRetries: number;
+  // Personalize only: dish texts in this reply rejected by the claim guard.
+  qualityRejections?: number;
 };
 
 export type LLMResult<T> = { data: T; meta: LLMMeta };
@@ -53,7 +55,7 @@ const REQUEST_TIMEOUT_MS = 45_000;
 const CALL_BUDGET_MS = 50_000;
 
 type Mode = "response_format" | "structured_outputs" | "prompt";
-type Message = OpenAI.Chat.Completions.ChatCompletionMessageParam;
+export type Message = OpenAI.Chat.Completions.ChatCompletionMessageParam;
 type Usage = { promptTokens: number; completionTokens: number };
 
 // Each call pays its share of a GPU running at the benchmarked throughput: the
@@ -111,7 +113,7 @@ export function extractJSON(text: string): unknown {
   throw new SyntaxError("unterminated JSON object in reply");
 }
 
-function validate<T>(text: string, schema: z.ZodType<T>): { ok: true; data: T } | { ok: false; error: string } {
+export function validate<T>(text: string, schema: z.ZodType<T>): { ok: true; data: T } | { ok: false; error: string } {
   let raw: unknown;
   try {
     raw = extractJSON(text);
@@ -124,7 +126,7 @@ function validate<T>(text: string, schema: z.ZodType<T>): { ok: true; data: T } 
 
 // Asks for schema-constrained output. A server that rejects response_format gets
 // vLLM's structured_outputs instead, and failing that a plain "JSON only" prompt.
-async function complete(
+export async function complete(
   client: OpenAI,
   args: { model: string; messages: Message[]; jsonSchema: object; task: string; maxTokens?: number; temperature?: number },
   deadline: number,
@@ -164,6 +166,37 @@ async function complete(
   throw new Error("no structured output mode left");
 }
 
+// The request the app sends for a task. The JSON Schema goes in the system prompt
+// too, so the model sees field meanings in every structured-output mode.
+export function prepareRequest(args: { system: string; user: string; schema: z.ZodType }): {
+  jsonSchema: Record<string, unknown>;
+  messages: Message[];
+} {
+  const jsonSchema = z.toJSONSchema(args.schema) as Record<string, unknown>;
+  delete jsonSchema.$schema;
+  return {
+    jsonSchema,
+    messages: [
+      {
+        role: "system",
+        content: `${args.system}\n\nReply with one JSON object only, no other text, matching this JSON Schema:\n${JSON.stringify(jsonSchema)}`,
+      },
+      { role: "user", content: args.user },
+    ],
+  };
+}
+
+export function createClient(): OpenAI {
+  const cfg = config();
+  return new OpenAI({
+    baseURL: cfg.baseURL,
+    apiKey: cfg.apiKey || "not-set",
+    maxRetries: 0,
+    // Resolved per request so tests can replace the global fetch.
+    fetch: (url, init) => globalThis.fetch(url, init),
+  });
+}
+
 async function fromCache<T>(task: string, key: string | undefined, schema: z.ZodType<T>): Promise<LLMResult<T> | null> {
   if (!key) return null;
   const entry = (await readCache(key)) as { data?: unknown; meta?: LLMMeta } | null;
@@ -182,22 +215,9 @@ export async function generateJSON<T>(args: GenerateArgs<T>): Promise<LLMResult<
     return { data, meta: buildMeta(args.task, cfg.model, "mock", startedAt, { promptTokens: 0, completionTokens: 0 }, 0) };
   }
 
-  const jsonSchema = z.toJSONSchema(args.schema) as Record<string, unknown>;
-  delete jsonSchema.$schema;
-  let messages: Message[] = [
-    {
-      role: "system",
-      content: `${args.system}\n\nReply with one JSON object only, no other text, matching this JSON Schema:\n${JSON.stringify(jsonSchema)}`,
-    },
-    { role: "user", content: args.user },
-  ];
-  const client = new OpenAI({
-    baseURL: cfg.baseURL,
-    apiKey: cfg.apiKey || "not-set",
-    maxRetries: 0,
-    // Resolved per request so tests can replace the global fetch.
-    fetch: (url, init) => globalThis.fetch(url, init),
-  });
+  const { jsonSchema, messages: initialMessages } = prepareRequest(args);
+  let messages = initialMessages;
+  const client = createClient();
   const usage: Usage = { promptTokens: 0, completionTokens: 0 };
   const deadline = startedAt + CALL_BUDGET_MS;
 

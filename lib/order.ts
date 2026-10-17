@@ -109,6 +109,18 @@ function userPrompt(menu: Menu, profile: DinerProfile, text: string, partySize: 
   });
 }
 
+// The model request for an order; also used by scripts/bench.ts.
+export function orderRequest(menu: Menu, profile: DinerProfile, text: string, partySize: number) {
+  return {
+    task: "order",
+    system: systemPrompt(menu, profile),
+    user: userPrompt(menu, profile, text, partySize),
+    schema: orderOutputSchema(menu),
+    maxTokens: 800,
+    temperature: 0.1,
+  };
+}
+
 export async function takeOrder(
   menu: Menu,
   profile: DinerProfile,
@@ -117,12 +129,7 @@ export async function takeOrder(
 ): Promise<{ result: OrderResult; meta: LLMMeta | null }> {
   try {
     const { data, meta } = await generateJSON({
-      task: "order",
-      system: systemPrompt(menu, profile),
-      user: userPrompt(menu, profile, text, partySize),
-      schema: orderOutputSchema(menu),
-      maxTokens: 800,
-      temperature: 0.1,
+      ...orderRequest(menu, profile, text, partySize),
       cacheKey: cacheKey({ task: "order", restaurantId: menu.restaurant.id, profile, input: { text, partySize } }),
       mock: () => mockOrder(menu, profile, text),
     });

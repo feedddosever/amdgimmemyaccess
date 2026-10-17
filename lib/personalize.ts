@@ -79,14 +79,21 @@ function italianCopy(dish: Dish): DishCopy {
   return { localizedName: dish.nameIt, explanation: dish.descriptionIt, aiGenerated: false };
 }
 
-async function generate(menu: Menu, dishes: Dish[], profile: Profile, retry: boolean) {
-  return generateJSON({
+// The model request for one category; also used by scripts/bench.ts.
+export function personalizeRequest(menu: Menu, dishes: Dish[], profile: Profile, retry = false) {
+  return {
     task: "personalize",
     system: systemPrompt(menu, profile, retry),
     user: userPrompt(menu, dishes),
     schema: personalizeOutputSchema(dishes.map((dish) => dish.id)),
     maxTokens: 120 + dishes.length * 160,
     temperature: 0.3,
+  };
+}
+
+async function generate(menu: Menu, dishes: Dish[], profile: Profile, retry: boolean) {
+  return generateJSON({
+    ...personalizeRequest(menu, dishes, profile, retry),
     cacheKey: cacheKey({
       task: "personalize",
       restaurantId: menu.restaurant.id,
@@ -107,7 +114,6 @@ async function personalizeCategory(menu: Menu, dishes: Dish[], profile: Profile)
     if (pending.length === 0) break;
     try {
       const { data, meta } = await generate(menu, pending, profile, retry);
-      calls.push(meta);
       const returned = new Map(data.dishes.map((dish) => [dish.dishId, dish]));
       const rejected: Dish[] = [];
       for (const dish of pending) {
@@ -115,10 +121,12 @@ async function personalizeCategory(menu: Menu, dishes: Dish[], profile: Profile)
         if (copy && !findClaim(copy.localizedName, copy.explanation)) {
           copies[dish.id] = { localizedName: copy.localizedName, explanation: copy.explanation, aiGenerated: true };
         } else {
-          if (copy) rejections++;
           rejected.push(dish);
         }
       }
+      const callRejections = rejected.filter((dish) => returned.has(dish.id)).length;
+      rejections += callRejections;
+      calls.push({ ...meta, qualityRejections: callRejections });
       pending = rejected;
     } catch (error) {
       if (!(error instanceof LLMError)) throw error;
