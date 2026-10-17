@@ -1,0 +1,78 @@
+# Runs the model scripts on GitHub instead of a local machine.
+# Needs the repository secret LLM_API_KEY (Settings -> Secrets and variables -> Actions).
+# Start it from Actions -> Model tasks -> Run workflow.
+#   llm-check   is the key accepted, which models are served, one live menu and order
+#   warm-cache  saves live answers into data/cache and commits them
+#   bench       load test; writes bench/ and the README table and commits them
+name: Model tasks
+
+on:
+  workflow_dispatch:
+    inputs:
+      task:
+        description: Script to run
+        type: choice
+        options: [llm-check, warm-cache, bench]
+        default: llm-check
+      base_url:
+        description: LLM_BASE_URL (usually ends in /v1)
+        type: string
+        default: https://developer.amd.com.cn/radeon/api/v1
+      model:
+        description: LLM_MODEL (llm-check lists the IDs the endpoint serves)
+        type: string
+        default: google/gemma-4-26B-A4B-it
+      bench_args:
+        description: Extra bench options, e.g. --duration 20 --levels 1,8,32
+        type: string
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency: model-tasks
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      TASK: ${{ inputs.task }}
+      BENCH_ARGS: ${{ inputs.bench_args }}
+      LLM_BASE_URL: ${{ inputs.base_url }}
+      LLM_MODEL: ${{ inputs.model }}
+      LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+      MOCK_LLM: "0"
+      GPU_HOURLY_USD: "1.99"
+      EUR_PER_USD: "0.86"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Run ${{ inputs.task }}
+        run: |
+          if [ -z "$LLM_API_KEY" ]; then
+            echo "::error::Add the repository secret LLM_API_KEY first (Settings -> Secrets and variables -> Actions)."
+            exit 1
+          fi
+          if [ "$TASK" = "bench" ]; then
+            npm run bench -- $BENCH_ARGS
+          else
+            npm run "$TASK"
+          fi
+      - name: Commit the results
+        if: success() && inputs.task != 'llm-check'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/cache README.md
+          if [ -d bench ]; then git add bench; fi
+          if git diff --cached --quiet; then
+            echo "Nothing new to commit."
+            exit 0
+          fi
+          git commit -m "Save $TASK results from $LLM_MODEL"
+          git push

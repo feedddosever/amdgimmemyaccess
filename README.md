@@ -81,7 +81,7 @@ Against the model: in `.env.local` set `MOCK_LLM=0`, `LLM_BASE_URL`, `LLM_API_KE
 
 1. Start the model on the droplet (vLLM with `--api-key`), and open only port 8000 in its firewall.
 2. Import this repository in Vercel and set the environment variables above, with `MOCK_LLM=0`.
-3. Run `npm run bench` and `npm run warm-cache` against the droplet, commit `bench/` and `data/cache`, and set `BENCH_TOKENS_PER_SEC`.
+3. Run `npm run bench` and `npm run warm-cache` against the droplet, commit `bench/` and `data/cache`, and set `BENCH_TOKENS_PER_SEC`. Without a local setup, run `llm-check`, `warm-cache` and `bench` from GitHub instead: add the repository secret `LLM_API_KEY`, then Actions → Model tasks → Run workflow (it commits the results).
 4. Deploy, then run `npm run smoke -- https://menubridge-nine.vercel.app`.
 5. When the GPU is switched off, the app serves the saved answers with the banner "GPU offline - showing results generated earlier on AMD Instinct MI300X".
 
