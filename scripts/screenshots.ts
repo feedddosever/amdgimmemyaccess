@@ -47,7 +47,12 @@ async function orderReview(browser: Browser, base: string) {
   await page.getByLabel("ご注文をお聞かせください").fill(DEMO_PRESETS[0].order);
   await page.getByRole("button", { name: "注文を確認する" }).click();
   await page.getByRole("button", { name: "キッチンに送る" }).waitFor();
-  await page.locator('section[aria-labelledby="review-title"]').screenshot({ path: path.join(OUT, "order-review-ja.png") });
+  // A full-page shot at scroll 0, so the sticky header doesn't cover the review's top.
+  await page.evaluate(() => window.scrollTo(0, 0));
+  const box = await page.locator('section[aria-labelledby="review-title"]').boundingBox();
+  if (!box) throw new Error("order review not found");
+  const clip = { x: 0, y: box.y - 16, width: 390, height: box.height + 32 };
+  await page.screenshot({ path: path.join(OUT, "order-review-ja.png"), fullPage: true, clip });
   await phone.close();
 }
 

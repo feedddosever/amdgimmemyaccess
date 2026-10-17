@@ -59,6 +59,7 @@ Against the model: in `.env.local` set `MOCK_LLM=0`, `LLM_BASE_URL`, `LLM_API_KE
 | `npm run warm-cache` | Saves the live model's answers for the demo into `data/cache` |
 | `npm run smoke -- <url>` | Checks a deployment: pages, health, a menu, an order with a removal |
 | `npm run check-submission` | Checks the lablab texts in `submission/` against their limits |
+| `npm run screenshots -- <url>` | Writes the QR code and the slide images to `submission/assets` (set `CHROMIUM_PATH`, or have Google Chrome installed) |
 
 ## Environment variables
 

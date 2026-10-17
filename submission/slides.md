@@ -1,12 +1,12 @@
 # MenuBridge slides
 
-Ten slides. Fill every double-bracket placeholder from `bench/results.md`, the AMD panel and the pilot before exporting to PDF; `npm run check-submission` lists them.
+Ten slides. Fill every double-bracket placeholder from `bench/results.md`, the AMD panel and the pilot before exporting to PDF; `npm run check-submission` lists them. The images are in `assets/`; retake them with `npm run screenshots -- <url>` once the live model answers.
 
 ## 1. MenuBridge
 
 Order in your language. The kitchen gets it in theirs.
 
-[[QR code of https://menubridge-nine.vercel.app]] · https://menubridge-nine.vercel.app
+![QR code for table 7](assets/qr-menu.png) · https://menubridge-nine.vercel.app
 
 > Speaker notes: MenuBridge is a QR menu that rewrites itself for each diner and sends the kitchen a ticket in Italian. Everything you will see runs live on one AMD Instinct MI300X.
 
@@ -21,7 +21,7 @@ Order in your language. The kitchen gets it in theirs.
 
 ## 3. One dish, two diners
 
-[[Screenshot: carbonara for the Japanese first-timer]] · [[Screenshot: carbonara for the Italian food lover]]
+![Carbonara for the Japanese first-timer](assets/carbonara-ja-first-timer.png) · ![Carbonara for the Italian food lover](assets/carbonara-it-foodie.png)
 
 The menu is written for the person holding it: a first-timer gets what it is and how to eat it; a food lover gets origin, technique and the detail Romans argue about.
 
@@ -29,7 +29,7 @@ The menu is written for the person holding it: a first-timer gets what it is and
 
 ## 4. How it works
 
-[[Diagram from /about: diner → app → Gemma 4 on MI300X → allergen and diet check (fixed rules) → Italian kitchen ticket; the ingredient sheet feeds the check]]
+Diagram: diner → app → Gemma 4 on MI300X → allergen and diet check (fixed rules) → Italian kitchen ticket; the ingredient sheet feeds the check.
 
 > Speaker notes: The diner orders in their own words. Gemma maps that to dish IDs and translates notes; then deterministic code checks every dish against the owner-approved ingredient sheet before anything reaches the kitchen.
 
