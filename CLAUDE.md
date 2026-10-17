@@ -19,6 +19,8 @@ Diner flow: scan QR -> choose language + audience (first time in Rome / food lov
 ## Stack
 Next.js App Router, TypeScript strict, Tailwind, npm. `openai` npm package against an OpenAI-compatible endpoint (vLLM on AMD Instinct MI300X serving google/gemma-4-26B-A4B-it). zod, vitest. Deploy on Vercel; also ship a Dockerfile and docker-compose.yml. No database: menus are JSON in /data; orders live in the browser and move between tabs with BroadcastChannel.
 
+Next.js 16 differs from older versions (Cache Components are on): follow @AGENTS.md and read the matching guide in node_modules/next/dist/docs/ before writing Next.js code.
+
 ## Conventions
 - Typed modules in /lib; API routes in /app/api/*/route.ts with `export const maxDuration = 60` and `export const runtime = "nodejs"`.
 - UI strings in /lib/i18n.ts for it, en, de, fr, es, ja, zh, ru. Gate reasons come from i18n templates, never from the model.
