@@ -33,7 +33,7 @@ export default function OrderBox({ lang, partySize, onPartySize, busy, onSubmit 
         placeholder={t(lang, "orderPlaceholder")}
         rows={3}
         maxLength={1000}
-        className="w-full resize-y rounded-xl border border-line bg-paper p-3 text-base focus-visible:outline-2 focus-visible:outline-terracotta"
+        className="w-full resize-y rounded-xl border border-line bg-paper p-3 text-base focus-visible:outline-2 focus-visible:outline-primary"
       />
       <div className="flex flex-wrap items-center gap-3">
         <MicButton lang={lang} onText={(spoken) => setText((current) => (current ? `${current} ${spoken}` : spoken))} />
@@ -55,7 +55,7 @@ export default function OrderBox({ lang, partySize, onPartySize, busy, onSubmit 
       <button
         type="submit"
         disabled={busy || !text.trim()}
-        className="min-h-12 rounded-full bg-terracotta px-6 font-semibold text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta"
+        className="min-h-12 rounded-full bg-primary px-6 font-semibold text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
       >
         {busy ? t(lang, "checking") : t(lang, "checkOrder")}
       </button>

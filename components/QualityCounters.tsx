@@ -24,7 +24,7 @@ export default function QualityCounters() {
           </li>
         ))}
       </ul>
-      <Link href="/metrics" className="inline-flex min-h-11 items-center self-start text-sm font-medium text-terracotta underline underline-offset-4">
+      <Link href="/metrics" className="inline-flex min-h-11 items-center self-start text-sm font-medium text-primary underline underline-offset-4">
         Open the AMD panel
       </Link>
     </div>

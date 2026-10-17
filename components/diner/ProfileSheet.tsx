@@ -17,9 +17,9 @@ function toggle<T>(values: T[], value: T): T[] {
 }
 
 const chip =
-  "min-h-11 rounded-full border px-4 py-2 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta";
+  "min-h-11 rounded-full border px-4 py-2 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 const chipOff = "border-line bg-white text-ink";
-const chipOn = "border-terracotta bg-terracotta text-white";
+const chipOn = "border-primary bg-primary text-white";
 
 export default function ProfileSheet({ restaurant, initial, onDone, onClose }: Props) {
   const [draft, setDraft] = useState(initial);
@@ -125,7 +125,7 @@ export default function ProfileSheet({ restaurant, initial, onDone, onClose }: P
 
         <p className="rounded-xl bg-white p-4 text-sm text-muted ring-1 ring-line">{t(lang, "safetyNote")}</p>
 
-        <button type="submit" className="min-h-12 rounded-full bg-terracotta px-6 text-lg font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta">
+        <button type="submit" className="min-h-12 rounded-full bg-primary px-6 text-lg font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
           {t(lang, "showMenu")}
         </button>
       </form>

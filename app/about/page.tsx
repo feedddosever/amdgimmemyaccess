@@ -52,14 +52,14 @@ export default async function AboutPage() {
   return (
     <main className="mx-auto flex w-full max-w-4xl flex-col gap-12 px-4 py-10 sm:px-6">
       <header className="flex flex-col gap-3">
-        <p className="font-semibold text-terracotta">MenuBridge · Create a New Kind of Experience</p>
+        <p className="font-semibold text-accent">MenuBridge · Create a New Kind of Experience</p>
         <h1 className="text-4xl font-semibold tracking-tight">How MenuBridge works</h1>
         <p className="text-lg text-muted">
           A menu that rewrites itself for the person holding it, takes their order in their own words, and hands the
           kitchen a ticket in Italian. This page is also our track compliance statement.
         </p>
         <div className="flex flex-wrap gap-3">
-          <Link href={DEMO_LINKS.japaneseTourist} className="inline-flex min-h-11 items-center rounded-full bg-terracotta px-5 font-semibold text-white">
+          <Link href={DEMO_LINKS.japaneseTourist} className="inline-flex min-h-11 items-center rounded-full bg-primary px-5 font-semibold text-white">
             Try the demo
           </Link>
           <Link href="/demo" className="inline-flex min-h-11 items-center rounded-full bg-white px-5 font-semibold ring-1 ring-line">
@@ -83,7 +83,7 @@ export default async function AboutPage() {
               <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-ink text-sm font-semibold text-white" aria-hidden>
                 {index + 1}
               </span>
-              <div className={`flex-1 rounded-xl p-4 ring-1 ${step.highlight ? "bg-white ring-2 ring-terracotta" : "bg-white ring-line"}`}>
+              <div className={`flex-1 rounded-xl p-4 ring-1 ${step.highlight ? "bg-white ring-2 ring-primary" : "bg-white ring-line"}`}>
                 <h3 className="font-semibold">{step.title}</h3>
                 <p className="text-muted">{step.text}</p>
                 {step.highlight && (
@@ -124,7 +124,7 @@ export default async function AboutPage() {
               <li>a draft ingredient sheet when importing a new menu, which the owner must approve</li>
             </ul>
           </div>
-          <div className="rounded-xl bg-white p-4 ring-2 ring-terracotta">
+          <div className="rounded-xl bg-white p-4 ring-2 ring-primary">
             <h3 className="font-semibold">It never decides</h3>
             <ul className="mt-2 list-disc pl-5 text-muted">
               <li>which allergens a dish contains</li>

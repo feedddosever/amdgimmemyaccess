@@ -23,7 +23,7 @@ function chime(context: AudioContext | null) {
 }
 
 const STATUS_STYLE: Record<TicketStatus, string> = {
-  new: "bg-terracotta text-white",
+  new: "bg-accent text-white",
   confirmed: "bg-green-700 text-white",
   to_clarify: "bg-amber-500 text-ink",
 };
@@ -32,7 +32,7 @@ function TicketCard({ ticket, onStatus, compact }: { ticket: Ticket; onStatus: (
   const time = new Date(ticket.createdAt).toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" });
   const size = compact ? "text-lg" : "text-2xl";
   return (
-    <article className={`rounded-2xl bg-white p-5 shadow-sm ring-1 ${ticket.status === "new" ? "ring-terracotta" : "ring-line"}`}>
+    <article className={`rounded-2xl bg-white p-5 shadow-sm ring-1 ${ticket.status === "new" ? "ring-accent" : "ring-line"}`}>
       <header className="flex flex-wrap items-baseline justify-between gap-2">
         <h2 className={`${size} font-bold`}>{fillTemplate(KITCHEN.table, { table: ticket.table })}</h2>
         <span className={`rounded-full px-3 py-1 text-sm font-semibold ${STATUS_STYLE[ticket.status]}`}>{KITCHEN[`status_${ticket.status}`]}</span>

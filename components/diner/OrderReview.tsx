@@ -92,7 +92,7 @@ export default function OrderReview({ menu, profile, cart, lastOrder, dishName, 
                             key={id}
                             type="button"
                             onClick={() => onAdd({ dishId: id, qty: removed.qty, ...(removed.forWhom ? { forWhom: removed.forWhom } : {}) })}
-                            className="min-h-11 rounded-full bg-olive px-4 font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-olive"
+                            className="min-h-11 rounded-full bg-primary px-4 font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                           >
                             + {dishName(alternative)}
                           </button>
@@ -123,7 +123,7 @@ export default function OrderReview({ menu, profile, cart, lastOrder, dishName, 
           type="button"
           onClick={onSend}
           disabled={sendable === 0}
-          className="min-h-12 rounded-full bg-terracotta px-6 text-lg font-semibold text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta"
+          className="min-h-12 rounded-full bg-primary px-6 text-lg font-semibold text-white disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         >
           {t(lang, "sendToKitchen")}
         </button>

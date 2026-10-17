@@ -2,7 +2,7 @@ import Link from "next/link";
 import { DEMO_LINKS, REPO_URL } from "@/lib/site";
 
 const primary =
-  "inline-flex min-h-12 items-center justify-center rounded-full bg-terracotta px-6 text-center font-semibold text-white";
+  "inline-flex min-h-12 items-center justify-center rounded-full bg-primary px-6 text-center font-semibold text-white";
 const secondary =
   "inline-flex min-h-12 items-center justify-center rounded-full bg-white px-6 text-center font-semibold text-ink ring-1 ring-line";
 
@@ -26,7 +26,7 @@ export default function Home() {
     <main className="mx-auto flex w-full max-w-5xl flex-col gap-14 px-4 py-12 sm:px-6 sm:py-16">
       <section className="grid items-center gap-10 lg:grid-cols-[1.2fr_1fr]">
         <div className="flex flex-col gap-6">
-          <p className="font-semibold tracking-wide text-terracotta">MenuBridge</p>
+          <p className="font-semibold tracking-wide text-accent">MenuBridge</p>
           <h1 className="text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
             Order in your language. The kitchen gets it in theirs.
           </h1>
@@ -58,7 +58,7 @@ export default function Home() {
               <p className="font-semibold text-danger line-through decoration-1">スパゲッティ・アッラ・カルボナーラ</p>
               <p className="text-sm font-medium text-danger">除外：cured pork cheek（豚肉）を含みます</p>
             </div>
-            <p className="mt-3 inline-flex rounded-full bg-olive px-4 py-2 text-sm font-semibold text-white">+ トンナレッリ・カチョ・エ・ペペ</p>
+            <p className="mt-3 inline-flex rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white">+ トンナレッリ・カチョ・エ・ペペ</p>
           </div>
           <div className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-line" lang="it">
             <p className="text-xs text-muted">Cucina · Tavolo 7 · Cliente: giapponese</p>
@@ -76,7 +76,7 @@ export default function Home() {
         <ol className="grid gap-4 sm:grid-cols-3">
           {STEPS.map((step, index) => (
             <li key={step.title} className="flex flex-col gap-2 rounded-2xl bg-white p-5 ring-1 ring-line">
-              <span className="flex size-9 items-center justify-center rounded-full bg-terracotta font-semibold text-white" aria-hidden>
+              <span className="flex size-9 items-center justify-center rounded-full bg-accent font-semibold text-white" aria-hidden>
                 {index + 1}
               </span>
               <h3 className="text-lg font-semibold">{step.title}</h3>
@@ -96,7 +96,7 @@ export default function Home() {
         </Link>
       </section>
 
-      <footer className="flex flex-wrap gap-x-6 gap-y-2 border-t border-line pt-6 text-sm text-muted">
+      <footer className="flex flex-wrap gap-x-6 gap-y-2 border-t border-line pb-16 pt-6 text-sm text-muted">
         <Link href="/metrics" className="inline-flex min-h-11 items-center underline underline-offset-4">
           AMD panel
         </Link>

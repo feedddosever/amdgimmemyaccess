@@ -53,8 +53,8 @@ export default function MicButton({ lang, onText }: { lang: Lang; onText: (text:
       type="button"
       onClick={toggle}
       aria-pressed={listening}
-      className={`min-h-11 rounded-full px-4 font-medium ring-1 focus-visible:outline-2 focus-visible:outline-terracotta ${
-        listening ? "animate-pulse bg-terracotta text-white ring-terracotta" : "bg-white text-ink ring-line"
+      className={`min-h-11 rounded-full px-4 font-medium ring-1 focus-visible:outline-2 focus-visible:outline-primary ${
+        listening ? "animate-pulse bg-primary text-white ring-primary" : "bg-white text-ink ring-line"
       }`}
     >
       🎤 {listening ? t(lang, "listening") : t(lang, "speak")}

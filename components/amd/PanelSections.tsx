@@ -33,8 +33,8 @@ export function SummaryTiles({ summary }: { summary: PanelSummary }) {
 
 // Fill carries severity; the track is a lighter step of the same color.
 function Meter({ fraction }: { fraction: number }) {
-  const color = fraction >= 0.9 ? "bg-danger" : fraction >= 0.7 ? "bg-amber-500" : "bg-olive";
-  const track = fraction >= 0.9 ? "bg-danger/15" : fraction >= 0.7 ? "bg-amber-500/20" : "bg-olive/15";
+  const color = fraction >= 0.9 ? "bg-danger" : fraction >= 0.7 ? "bg-amber-500" : "bg-primary";
+  const track = fraction >= 0.9 ? "bg-danger/15" : fraction >= 0.7 ? "bg-amber-500/20" : "bg-primary/15";
   return (
     <div className={`h-2 w-full overflow-hidden rounded-full ${track}`} role="meter" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(fraction * 100)} aria-label="KV cache usage">
       <div className={`h-full rounded-full ${color}`} style={{ width: `${Math.min(100, fraction * 100)}%` }} />

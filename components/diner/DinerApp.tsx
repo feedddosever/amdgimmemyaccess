@@ -172,7 +172,7 @@ export default function DinerApp({ menu }: { menu: Menu }) {
         <button
           type="button"
           onClick={() => setView(view === "order" ? "menu" : "order")}
-          className="min-h-11 shrink-0 rounded-full bg-terracotta px-4 font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta"
+          className="min-h-11 shrink-0 rounded-full bg-primary px-4 font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         >
           {view === "order" ? t(lang, "backToMenu") : t(lang, "viewOrder", { count: cartCount })}
         </button>
@@ -263,7 +263,7 @@ export default function DinerApp({ menu }: { menu: Menu }) {
               if (dishes.length === 0) return null;
               return (
                 <section key={category} aria-labelledby={`cat-${category}`} className="flex flex-col gap-3">
-                  <h2 id={`cat-${category}`} className="text-xl font-semibold text-terracotta">
+                  <h2 id={`cat-${category}`} className="text-xl font-semibold text-accent">
                     {t(lang, `cat_${category}`)}
                   </h2>
                   {dishes.map((dish) => (
@@ -306,7 +306,7 @@ export default function DinerApp({ menu }: { menu: Menu }) {
         )}
       </main>
 
-      <footer className="border-t border-line px-4 py-3 text-center text-xs text-muted" lang="en">
+      <footer className="border-t border-line px-4 pb-20 pt-3 text-center text-xs text-muted" lang="en">
         Gemma 4 on AMD Instinct MI300X
         {footerMeta && (
           <>

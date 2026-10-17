@@ -18,7 +18,7 @@ import { CATEGORIES } from "@/lib/schema";
 
 const PASSCODE_KEY = "menubridge:admin-passcode";
 const input = "min-h-11 w-full rounded-lg border border-line bg-white px-3";
-const button = "min-h-11 rounded-full px-5 font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta";
+const button = "min-h-11 rounded-full px-5 font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 
 function readPasscode(): string {
   try {
@@ -309,7 +309,7 @@ function Editor({ state, setState }: { state: EditorState; setState: (next: Edit
           Vercel cannot write files, so download the JSON, save it as <code className="font-mono">data/{state.restaurant.id || "<id>"}.json</code>, commit and
           deploy. Unapproved dishes show &ldquo;Ask staff about allergens&rdquo; and are hidden from any diner who declares an allergy or a diet.
         </p>
-        <button type="button" onClick={download} className={`${button} self-start bg-terracotta text-white`}>
+        <button type="button" onClick={download} className={`${button} self-start bg-primary text-white`}>
           Download JSON
         </button>
         {errors.length > 0 && (
@@ -381,7 +381,7 @@ export default function ImportApp() {
           Admin passcode
           <input type="password" autoComplete="current-password" className={input} value={passcode} onChange={(e) => setPasscode(e.target.value)} />
         </label>
-        <button type="submit" className={`${button} bg-terracotta text-white`}>
+        <button type="submit" className={`${button} bg-primary text-white`}>
           Unlock
         </button>
         {error && (
@@ -427,7 +427,7 @@ export default function ImportApp() {
           className="w-full rounded-xl border border-line bg-white p-3 font-mono text-sm"
         />
       </label>
-      <button type="submit" disabled={busy} className={`${button} self-start bg-terracotta text-white disabled:opacity-50`}>
+      <button type="submit" disabled={busy} className={`${button} self-start bg-primary text-white disabled:opacity-50`}>
         {busy ? "Drafting with Gemma 4…" : "Draft the menu"}
       </button>
       {error && (

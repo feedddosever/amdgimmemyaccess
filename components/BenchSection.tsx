@@ -50,7 +50,7 @@ function TokensChart({ levels }: { levels: BenchLevel[] }) {
           const d = `M${x},${base} V${top + rr} Q${x},${top} ${x + rr},${top} H${x + barW - rr} Q${x + barW},${top} ${x + barW},${top + rr} V${base} Z`;
           return (
             <g key={level.concurrency}>
-              <path d={d} fill="var(--color-terracotta)">
+              <path d={d} fill="var(--color-accent)">
                 <title>{`${level.concurrency} concurrent: ${fmt.format(level.outputTokensPerSec)} tokens/s, p50 ${((level.p50Ms ?? 0) / 1000).toFixed(2)} s`}</title>
               </path>
               <text x={x + barW / 2} y={top - 6} textAnchor="middle" fontSize={12} fontWeight={600} fill="var(--color-ink)">

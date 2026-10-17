@@ -43,7 +43,7 @@ function DrawerBody({ onClose }: { onClose: () => void }) {
         <SummaryTiles summary={summarizeLog(entries)} />
         <ServerSection metrics={server.metrics} tokensPerSec={server.tokensPerSec} />
         <CallTable entries={entries} limit={8} compact />
-        <Link href="/metrics" className="min-h-11 content-center text-center font-medium text-terracotta underline underline-offset-4" onClick={onClose}>
+        <Link href="/metrics" className="min-h-11 content-center text-center font-medium text-primary underline underline-offset-4" onClick={onClose}>
           Open the full panel
         </Link>
       </aside>

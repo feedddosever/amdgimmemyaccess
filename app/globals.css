@@ -5,14 +5,17 @@
   --font-mono: var(--font-geist-mono);
 }
 
-/* Trattoria palette: warm paper, dark ink, terracotta and olive accents (all WCAG AA on paper). */
+/* Trattoria palette: warm paper and dark ink; basil green for every action,
+   terracotta only for headings and the brand, red only for allergens and removals.
+   Every text pair passes WCAG AA. */
 @theme {
   --color-paper: #faf7f2;
-  --color-ink: #1f1b16;
-  --color-muted: #625a50;
-  --color-line: #e7e0d5;
-  --color-terracotta: #a3401b;
-  --color-olive: #4f5d27;
+  --color-ink: #1c1a17;
+  --color-muted: #5e584f;
+  --color-line: #e6e0d6;
+  --color-primary: #1e5b45;
+  --color-primary-soft: #e4efe9;
+  --color-accent: #a33f1a;
   --color-danger: #b42318;
 }
 
@@ -28,6 +31,6 @@ body {
 
 /* Visible focus on every interactive element (WCAG 2.4.7). */
 :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
-  outline: 2px solid var(--color-terracotta);
+  outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }

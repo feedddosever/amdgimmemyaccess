@@ -27,7 +27,7 @@ export default function DishCard({ dish, menu, lang, copy, inCart, onAdd }: Prop
   return (
     <article className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-line">
       <div className="flex items-start justify-between gap-3">
-        <div className={copy?.aiGenerated ? "border-l-2 border-terracotta/40 pl-3" : undefined}>
+        <div className={copy?.aiGenerated ? "border-l-2 border-accent/40 pl-3" : undefined}>
           <h3 className="text-lg font-semibold leading-snug">{name}</h3>
           {showItalianName && (
             <p className="text-sm italic text-muted" lang="it">
@@ -60,7 +60,7 @@ export default function DishCard({ dish, menu, lang, copy, inCart, onAdd }: Prop
                     type="button"
                     aria-expanded={openChip === code}
                     onClick={() => setOpenChip(openChip === code ? null : code)}
-                    className="relative min-h-8 rounded-full bg-amber-50 px-3 py-1 text-sm text-amber-900 ring-1 ring-amber-200 after:absolute after:inset-x-0 after:-inset-y-1.5 focus-visible:outline-2 focus-visible:outline-terracotta"
+                    className="relative min-h-8 rounded-full bg-amber-50 px-3 py-1 text-sm text-amber-900 ring-1 ring-amber-200 after:absolute after:inset-x-0 after:-inset-y-1.5 focus-visible:outline-2 focus-visible:outline-primary"
                   >
                     {ALLERGEN_NAMES[code][lang]}
                   </button>
@@ -82,7 +82,9 @@ export default function DishCard({ dish, menu, lang, copy, inCart, onAdd }: Prop
         <button
           type="button"
           onClick={onAdd}
-          className="min-h-11 rounded-full bg-olive px-5 font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-olive"
+          className={`min-h-11 rounded-full px-5 font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
+            inCart > 0 ? "bg-primary text-white" : "bg-primary-soft text-primary ring-1 ring-primary/20"
+          }`}
         >
           {inCart > 0 ? `${t(lang, "added")} ×${inCart}` : `+ ${t(lang, "add")}`}
         </button>
