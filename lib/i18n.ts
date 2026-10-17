@@ -77,7 +77,7 @@ export function fillTemplate(template: string, values: Record<string, string>): 
 
 // The ingredient sheet has Italian and English names; every other language uses English.
 export function ingredientName(ingredient: Ingredient, lang: Lang): string {
-  return lang === "it" ? ingredient.name.it : ingredient.name.en;
+  return ingredient.name[lang] ?? ingredient.name.en;
 }
 
 export function formatReason(reason: GateReason, lang: Lang, menu: Menu): string {

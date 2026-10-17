@@ -8,9 +8,22 @@ export const Id = z.string().regex(/^[a-z0-9][a-z0-9_-]*$/);
 export const CATEGORIES = ["antipasti", "primi", "secondi", "contorni", "dolci"] as const;
 export const AUDIENCES = ["first_timer", "foodie", "family", "dietary"] as const;
 
+// Italian and English names are required. The other diner languages are optional and
+// fall back to English, so a menu drafted in /admin/import works before it is translated.
+const OptionalName = z.string().min(1).optional();
+
 export const IngredientSchema = z.object({
   id: Id,
-  name: z.object({ it: z.string().min(1), en: z.string().min(1) }),
+  name: z.object({
+    it: z.string().min(1),
+    en: z.string().min(1),
+    de: OptionalName,
+    fr: OptionalName,
+    es: OptionalName,
+    ja: OptionalName,
+    zh: OptionalName,
+    ru: OptionalName,
+  }),
   allergens: z.array(z.enum(ALLERGEN_CODES)),
   tags: z.array(z.enum(TAG_CODES)),
 });

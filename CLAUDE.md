@@ -1,7 +1,7 @@
 # MenuBridge — project brief
 
 ## Product
-MenuBridge is a QR menu web app for restaurants, built for the AMD Developer Hackathon ACT III (lablab.ai), track "Create a New Kind of Experience". Deadline: UNCONFIRMED — best guess Sunday 18 October 2026, 12:00 Europe/Rome (CEST, UTC+2); one official page says the build ends Saturday 17 October. Confirm on the lablab Discord ACT III channel and update this line. Solo builder: a working, deployed demo beats completeness.
+MenuBridge is a QR menu web app for restaurants, built for the AMD Developer Hackathon ACT III (lablab.ai), track "Create a New Kind of Experience". Deadline: Sunday 18 October 2026, 12:00 Europe/Rome (CEST, UTC+2), confirmed on 17 October. Solo builder: a working, deployed demo beats completeness.
 
 Diner flow: scan QR -> choose language + audience (first time in Rome / food lover / family with kids / dietary needs) + allergens + diets -> the menu rewrites itself for this diner -> the diner types the order in their own words -> the app maps it to real dishes, blocks anything that clashes with their allergens or diet and explains why in their language -> diner confirms -> the kitchen gets a ticket in Italian -> a waiter confirms at the table.
 

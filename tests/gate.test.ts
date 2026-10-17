@@ -137,10 +137,24 @@ describe("reason strings", () => {
     );
   });
 
-  it("renders in Japanese", () => {
-    expect(formatReason(pork, "ja", menu)).toBe("cured pork cheek（豚肉）を含みます");
-    expect(formatReason(fish, "ja", menu)).toBe("anchovies（魚）を含みます");
+  it("renders in Japanese, with the ingredient named in Japanese", () => {
+    expect(formatReason(pork, "ja", menu)).toBe("豚ほほ肉の塩漬け（豚肉）を含みます");
+    expect(formatReason(fish, "ja", menu)).toBe("アンチョビ（魚）を含みます");
     expect(formatReason(unverified, "ja", menu)).toBe("この料理のアレルゲン情報は、まだ店舗で確認されていません");
+  });
+
+  it("names every demo ingredient in every diner language", () => {
+    for (const ingredient of menu.ingredients) {
+      for (const lang of LANGS) expect(ingredient.name[lang], `${ingredient.id} in ${lang}`).toBeTruthy();
+    }
+  });
+
+  it("falls back to the English name when the sheet has none in the diner's language", () => {
+    const sheet = MenuSchema.parse({
+      ...demo,
+      ingredients: demo.ingredients.map(({ id, name, allergens, tags }) => ({ id, name: { it: name.it, en: name.en }, allergens, tags })),
+    });
+    expect(formatReason(pork, "ja", sheet)).toBe("cured pork cheek（豚肉）を含みます");
   });
 
   it.each(LANGS)("fills every placeholder in %s", (lang) => {
