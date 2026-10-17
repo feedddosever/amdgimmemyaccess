@@ -16,7 +16,8 @@
     "warm-cache": "tsx scripts/warm-cache.ts",
     "smoke": "tsx scripts/smoke.ts",
     "check-submission": "tsx scripts/check-submission.ts",
-    "screenshots": "tsx scripts/screenshots.ts"
+    "screenshots": "tsx scripts/screenshots.ts",
+    "llm-check": "tsx scripts/llm-check.ts"
   },
   "dependencies": {
     "next": "16.4.2",

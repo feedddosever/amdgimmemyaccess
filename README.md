@@ -55,6 +55,7 @@ Against the model: in `.env.local` set `MOCK_LLM=0`, `LLM_BASE_URL`, `LLM_API_KE
 | Command | What it does |
 |---|---|
 | `npm test` | Unit tests (vitest), including the allergen gate |
+| `npm run llm-check` | Checks the endpoint in `.env.local`: key accepted, models served, one live menu and one live order |
 | `npm run bench` | Load test of the live endpoint; writes `bench/` and the table above |
 | `npm run warm-cache` | Saves the live model's answers for the demo into `data/cache` |
 | `npm run smoke -- <url>` | Checks a deployment: pages, health, a menu, an order with a removal |
