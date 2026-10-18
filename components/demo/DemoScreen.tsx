@@ -22,7 +22,7 @@ export default function DemoScreen() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col gap-4 p-4 lg:p-6" lang="en">
+    <main className="flex min-h-screen flex-col gap-4 p-4 lg:p-6" lang="en">
       <div className="grid flex-1 gap-6 lg:grid-cols-[auto_1fr]">
         <div className="flex w-full max-w-[400px] flex-col items-center gap-3 justify-self-center">
           <label className="flex w-full flex-col gap-1 text-sm font-medium">
@@ -60,6 +60,6 @@ export default function DemoScreen() {
         </div>
       </div>
       <AmdStrip />
-    </div>
+    </main>
   );
 }

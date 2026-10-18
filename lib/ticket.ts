@@ -29,7 +29,7 @@ export type Ticket = {
 
 // The kitchen reads Italian: a child is labelled in Italian, anything else is
 // shown as the diner wrote it.
-function kitchenForWhom(forWhom: string | undefined): string | undefined {
+export function kitchenForWhom(forWhom: string | undefined): string | undefined {
   if (!forWhom) return undefined;
   if (!mentionsChild(forWhom)) return forWhom;
   const age = childAge(forWhom);

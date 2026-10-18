@@ -159,6 +159,7 @@ No local setup? **Actions → Model tasks → Run workflow** runs `llm-check`, `
 | `BENCH_TOKENS_PER_SEC` | printed by `npm run bench` | Throughput at concurrency 32, used to price each call |
 | `ADMIN_PASSCODE` | secret | Unlocks `/admin/import`; the page is closed when unset |
 | `MOCK_LLM` | `1` | `1` = saved answers, no model needed |
+| `LLM_MAX_CONCURRENCY` | `2` | Optional cap on parallel model requests, for shared endpoints such as AMD Token Factory |
 | `CACHE_WRITE` | unset | Set only by `npm run warm-cache` |
 
 </details>

@@ -10,7 +10,14 @@ export function config() {
     gpuHourlyUsd: positiveNumber(env.GPU_HOURLY_USD),
     eurPerUsd: positiveNumber(env.EUR_PER_USD),
     benchTokensPerSec: positiveNumber(env.BENCH_TOKENS_PER_SEC),
+    // Optional cap on parallel model requests, for shared endpoints with a per-key limit.
+    maxConcurrency: positiveInteger(env.LLM_MAX_CONCURRENCY),
   };
+}
+
+function positiveInteger(value: string | undefined): number | null {
+  const parsed = positiveNumber(value);
+  return parsed === null ? null : Math.max(1, Math.floor(parsed));
 }
 
 function positiveNumber(value: string | undefined): number | null {

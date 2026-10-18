@@ -60,7 +60,7 @@ function DrawerButton() {
         type="button"
         onClick={() => setOpen(true)}
         aria-expanded={open}
-        className="fixed bottom-4 left-4 z-40 flex min-h-11 items-center gap-2 rounded-full bg-ink px-4 text-sm font-semibold text-white shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+        className="fixed bottom-4 left-4 z-40 flex min-h-11 print:hidden items-center gap-2 rounded-full bg-ink px-4 text-sm font-semibold text-white shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
       >
         <span className={`inline-block size-2.5 rounded-full ${health ? DOT[health.status] : "bg-zinc-400"}`} aria-hidden />
         AMD

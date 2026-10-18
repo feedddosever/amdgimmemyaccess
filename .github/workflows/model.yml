@@ -21,7 +21,11 @@ on:
       model:
         description: LLM_MODEL (llm-check lists the IDs the endpoint serves)
         type: string
-        default: google/gemma-4-26B-A4B-it
+        default: Gemma-4-31B-IT
+      max_concurrency:
+        description: LLM_MAX_CONCURRENCY (AMD Token Factory allows about 2 per key)
+        type: string
+        default: "2"
       bench_args:
         description: Extra bench options, e.g. --duration 20 --levels 1,8,32
         type: string
@@ -43,11 +47,12 @@ jobs:
       LLM_MODEL: ${{ inputs.model }}
       LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
       MOCK_LLM: "0"
+      LLM_MAX_CONCURRENCY: ${{ inputs.max_concurrency }}
       GPU_HOURLY_USD: "1.99"
       EUR_PER_USD: "0.86"
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm

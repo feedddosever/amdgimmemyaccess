@@ -209,6 +209,9 @@ const UI_EN = {
   mealsShowMine: "Show in my language",
   mealsClear: "Delete my meal record",
   mealsSaved: "Saved in My meals",
+  mealsPrint: "Print or save as PDF",
+  mealsPrintTitle: "Meal record for a doctor",
+  mealsPrintedOn: "Printed on {date}",
 };
 
 export type UIKey = keyof typeof UI_EN;
@@ -278,6 +281,9 @@ export const UI: Record<Lang, Record<UIKey, string>> = {
     mealsShowMine: "Mostra nella mia lingua",
     mealsClear: "Cancella i miei pasti",
     mealsSaved: "Salvato in I miei pasti",
+    mealsPrint: "Stampa o salva in PDF",
+    mealsPrintTitle: "Registro dei pasti per il medico",
+    mealsPrintedOn: "Stampato il {date}",
   },
   de: {
     welcomeTitle: "Willkommen bei {restaurant}",
@@ -342,6 +348,9 @@ export const UI: Record<Lang, Record<UIKey, string>> = {
     mealsShowMine: "In meiner Sprache zeigen",
     mealsClear: "Meine Mahlzeiten löschen",
     mealsSaved: "In „Meine Mahlzeiten“ gespeichert",
+    mealsPrint: "Drucken oder als PDF speichern",
+    mealsPrintTitle: "Mahlzeitenprotokoll für den Arzt",
+    mealsPrintedOn: "Gedruckt am {date}",
   },
   fr: {
     welcomeTitle: "Bienvenue chez {restaurant}",
@@ -406,6 +415,9 @@ export const UI: Record<Lang, Record<UIKey, string>> = {
     mealsShowMine: "Afficher dans ma langue",
     mealsClear: "Effacer mes repas",
     mealsSaved: "Enregistré dans Mes repas",
+    mealsPrint: "Imprimer ou enregistrer en PDF",
+    mealsPrintTitle: "Relevé des repas pour le médecin",
+    mealsPrintedOn: "Imprimé le {date}",
   },
   es: {
     welcomeTitle: "Te damos la bienvenida a {restaurant}",
@@ -470,6 +482,9 @@ export const UI: Record<Lang, Record<UIKey, string>> = {
     mealsShowMine: "Mostrar en mi idioma",
     mealsClear: "Borrar mis comidas",
     mealsSaved: "Guardado en Mis comidas",
+    mealsPrint: "Imprimir o guardar en PDF",
+    mealsPrintTitle: "Registro de comidas para el médico",
+    mealsPrintedOn: "Impreso el {date}",
   },
   ja: {
     welcomeTitle: "{restaurant}へようこそ",
@@ -534,6 +549,9 @@ export const UI: Record<Lang, Record<UIKey, string>> = {
     mealsShowMine: "自分の言語で表示",
     mealsClear: "食事の記録を削除",
     mealsSaved: "食事の記録に保存しました",
+    mealsPrint: "印刷またはPDFで保存",
+    mealsPrintTitle: "医師向けの食事記録",
+    mealsPrintedOn: "印刷日：{date}",
   },
   zh: {
     welcomeTitle: "欢迎光临{restaurant}",
@@ -598,6 +616,9 @@ export const UI: Record<Lang, Record<UIKey, string>> = {
     mealsShowMine: "用我的语言显示",
     mealsClear: "删除我的用餐记录",
     mealsSaved: "已保存到我的用餐记录",
+    mealsPrint: "打印或保存为PDF",
+    mealsPrintTitle: "供医生查看的用餐记录",
+    mealsPrintedOn: "打印日期：{date}",
   },
   ru: {
     welcomeTitle: "Добро пожаловать в {restaurant}",
@@ -662,6 +683,9 @@ export const UI: Record<Lang, Record<UIKey, string>> = {
     mealsShowMine: "Показать на моём языке",
     mealsClear: "Удалить мои блюда",
     mealsSaved: "Сохранено в «Мои блюда»",
+    mealsPrint: "Распечатать или сохранить в PDF",
+    mealsPrintTitle: "Записи о еде для врача",
+    mealsPrintedOn: "Напечатано {date}",
   },
 };
 

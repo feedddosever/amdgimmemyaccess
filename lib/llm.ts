@@ -1,4 +1,4 @@
-import OpenAI, { BadRequestError } from "openai";
+import OpenAI, { BadRequestError, RateLimitError } from "openai";
 import { z } from "zod";
 import { readCache, writeCache } from "@/lib/cache";
 import { config } from "@/lib/config";
@@ -55,6 +55,50 @@ const REQUEST_TIMEOUT_MS = 45_000;
 const CALL_BUDGET_MS = 50_000;
 
 type Mode = "response_format" | "structured_outputs" | "prompt";
+
+// Shared endpoints such as AMD Token Factory cap parallel requests per key and answer
+// 429 above the cap. With LLM_MAX_CONCURRENCY set, calls beyond it wait for a free
+// slot; a 429 is retried after the server's Retry-After, inside the call budget.
+const RATE_LIMIT_RETRIES = 3;
+let inFlight = 0;
+const waiting: (() => void)[] = [];
+
+async function acquireSlot(limit: number | null, deadline: number): Promise<boolean> {
+  if (!limit) return true;
+  while (inFlight >= limit) {
+    if (deadline - Date.now() < 1_000) {
+      // Hand the wake-up on, in case a slot freed while this call gave up.
+      waiting.shift()?.();
+      return false;
+    }
+    await new Promise<void>((resolve) => {
+      const wake = () => {
+        clearTimeout(timer);
+        resolve();
+      };
+      // Near the deadline, stop waiting and leave the queue, so no release is spent on this call.
+      const timer = setTimeout(() => {
+        waiting.splice(waiting.indexOf(wake) >>> 0, 1);
+        resolve();
+      }, Math.max(0, deadline - Date.now() - 1_000));
+      waiting.push(wake);
+    });
+  }
+  inFlight++;
+  return true;
+}
+
+function releaseSlot(limit: number | null) {
+  if (!limit) return;
+  inFlight--;
+  waiting.shift()?.();
+}
+
+function retryAfterMs(error: InstanceType<typeof RateLimitError>, attempt: number): number {
+  const header = error.headers instanceof Headers ? error.headers.get("retry-after") : null;
+  const seconds = Number(header);
+  return header && Number.isFinite(seconds) && seconds >= 0 ? Math.min(seconds * 1_000, 10_000) : 1_000 * 2 ** attempt;
+}
 export type Message = OpenAI.Chat.Completions.ChatCompletionMessageParam;
 type Usage = { promptTokens: number; completionTokens: number };
 
@@ -131,9 +175,8 @@ export async function complete(
   args: { model: string; messages: Message[]; jsonSchema: object; task: string; maxTokens?: number; temperature?: number },
   deadline: number,
 ): Promise<{ text: string; model: string; usage: Usage }> {
+  const limit = config().maxConcurrency;
   for (const mode of ["response_format", "structured_outputs", "prompt"] as Mode[]) {
-    const remaining = deadline - Date.now();
-    if (remaining < 1_000) throw new LLMError("time budget exhausted", "unreachable");
     const body: Record<string, unknown> = {
       model: args.model,
       messages: args.messages,
@@ -145,22 +188,36 @@ export async function complete(
     } else if (mode === "structured_outputs") {
       body.structured_outputs = { json: args.jsonSchema };
     }
-    try {
-      const response = await client.chat.completions.create(
-        body as unknown as OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming,
-        { timeout: Math.min(REQUEST_TIMEOUT_MS, remaining) },
-      );
-      return {
-        text: response.choices[0]?.message?.content ?? "",
-        model: response.model || args.model,
-        usage: {
-          promptTokens: response.usage?.prompt_tokens ?? 0,
-          completionTokens: response.usage?.completion_tokens ?? 0,
-        },
-      };
-    } catch (error) {
-      if (error instanceof BadRequestError && mode !== "prompt") continue;
-      throw error;
+    for (let rateLimited = 0; ; rateLimited++) {
+      if (deadline - Date.now() < 1_000 || !(await acquireSlot(limit, deadline))) {
+        throw new LLMError("time budget exhausted", "unreachable");
+      }
+      let retryIn: number | null = null;
+      try {
+        const response = await client.chat.completions.create(
+          body as unknown as OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming,
+          { timeout: Math.min(REQUEST_TIMEOUT_MS, deadline - Date.now()) },
+        );
+        return {
+          text: response.choices[0]?.message?.content ?? "",
+          model: response.model || args.model,
+          usage: {
+            promptTokens: response.usage?.prompt_tokens ?? 0,
+            completionTokens: response.usage?.completion_tokens ?? 0,
+          },
+        };
+      } catch (error) {
+        if (error instanceof RateLimitError && rateLimited < RATE_LIMIT_RETRIES) {
+          const wait = retryAfterMs(error, rateLimited);
+          if (deadline - Date.now() > wait + 1_000) retryIn = wait;
+        }
+        if (retryIn === null && !(error instanceof BadRequestError && mode !== "prompt")) throw error;
+      } finally {
+        releaseSlot(limit);
+      }
+      // A 400 means this server does not take this structured output mode: try the next one.
+      if (retryIn === null) break;
+      await new Promise((resolve) => setTimeout(resolve, retryIn));
     }
   }
   throw new Error("no structured output mode left");

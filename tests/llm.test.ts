@@ -216,3 +216,54 @@ describe("extractJSON", () => {
     expect(() => extractJSON('{"a": 1')).toThrow(SyntaxError);
   });
 });
+
+describe("generateJSON on a shared endpoint with per-key limits", () => {
+  function rateLimited(retryAfter = "0"): Response {
+    return new Response(JSON.stringify({ error: { message: "rate limit exceeded" } }), {
+      status: 429,
+      headers: { "content-type": "application/json", "retry-after": retryAfter },
+    });
+  }
+
+  it("retries a 429 after the server's Retry-After, in the same output mode", async () => {
+    fetchMock.mockResolvedValueOnce(rateLimited()).mockResolvedValueOnce(completion(JSON.stringify(valid)));
+    const { data, meta } = await generate();
+
+    expect(data).toEqual(valid);
+    expect(meta.servedFrom).toBe("live");
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(requestBody(1).response_format).toBeDefined();
+  });
+
+  it("falls back to the cache when the endpoint keeps answering 429", async () => {
+    vi.stubEnv("CACHE_WRITE", "1");
+    await writeCache(key, {
+      data: valid,
+      meta: { task: "personalize", model: "m", servedFrom: "live", latencyMs: 1, promptTokens: 1, completionTokens: 1, tokensPerSec: 1, costEur: 0, gpu: "AMD Instinct MI300X", validationRetries: 0 },
+    });
+    vi.stubEnv("CACHE_WRITE", "0");
+    fetchMock.mockImplementation(async () => rateLimited());
+    const { meta } = await generate();
+
+    expect(meta.servedFrom).toBe("cache");
+    expect(fetchMock).toHaveBeenCalledTimes(4);
+  });
+
+  it("keeps at most LLM_MAX_CONCURRENCY requests in flight", async () => {
+    vi.stubEnv("LLM_MAX_CONCURRENCY", "1");
+    let running = 0;
+    let peak = 0;
+    fetchMock.mockImplementation(async () => {
+      running++;
+      peak = Math.max(peak, running);
+      await new Promise((resolve) => setTimeout(resolve, 20));
+      running--;
+      return completion(JSON.stringify(valid));
+    });
+    const results = await Promise.all([generate(), generate(), generate()]);
+
+    expect(results.every((result) => result.meta.servedFrom === "live")).toBe(true);
+    expect(peak).toBe(1);
+    expect(fetchMock).toHaveBeenCalledTimes(3);
+  });
+});
