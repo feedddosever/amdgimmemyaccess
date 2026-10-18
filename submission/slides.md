@@ -52,8 +52,9 @@ After the order, **My meals** keeps a private record on the phone of every dish,
 - vLLM on ROCm, OpenAI-compatible endpoint with JSON-schema constrained output; connecting it takes three env vars
 - The AMD panel (`/metrics` and the drawer) shows model, latency, tokens/s and cost for every call; with canned answers it shows "mock"
 - `npm run bench` (1, 8, 32 and 64 concurrent requests) and `npm run warm-cache` are ready; they were not run because no GPU was connected in time, so there are no benchmark numbers yet
+- First live calls ran on AMD Token Factory with Gemma-4-31B-IT, but the shared endpoint answered at about 6 tokens/s with a shared key that allows few parallel requests: too slow for a live demo
 
-> Speaker notes: This slide has no measured numbers on purpose. The AMD Developer Cloud MI300X server was not set up in time and the Token Factory key was rejected, so the demo runs on canned answers. Everything that talks to the GPU is built and waiting: point the three env vars at vLLM, run the benchmark, and the panel measures every call.
+> Speaker notes: This slide has no measured numbers on purpose. The AMD Developer Cloud MI300X server was not set up in time. The first live calls ran on AMD Token Factory with Gemma-4-31B-IT, but the shared endpoint answered at about 6 tokens per second, too slow for a live demo, so the demo runs on canned answers. Everything that talks to the GPU is built and waiting: point the three env vars at vLLM, run the benchmark, and the panel measures every call.
 
 ## 7. Track compliance
 

@@ -94,7 +94,7 @@ To add a restaurant: open `/admin/import`, paste its Italian menu, check the dra
 
 ## Limitations
 
-- No live model is connected yet: the AMD Developer Cloud MI300X server was not set up in time and the Token Factory key was rejected. The deployed demo runs with `MOCK_LLM=1` on canned answers, and `npm run bench` and `npm run warm-cache` are ready but have not been run, so there are no benchmark numbers.
+- No live model is connected yet: the AMD Developer Cloud MI300X server was not set up in time. On 18 October the first live calls ran on AMD Token Factory with `Gemma-4-31B-IT` (`npm run llm-check` from Actions -> Model tasks), but the shared endpoint answered at about 6 tokens/s and allows few parallel requests, so most menu calls and the order timed out: too slow for a live demo. The deployed demo runs with `MOCK_LLM=1` on canned answers, and `npm run bench` and `npm run warm-cache` are ready but have not been run, so there are no benchmark numbers.
 - The demo menu uses typical Roman recipes, not a real restaurant's ingredient sheet; each restaurant approves its own.
 - Orders and tickets live in the browser (BroadcastChannel and localStorage), so the diner and the kitchen must share a browser; a real deployment needs a server-side order store.
 - Ingredient names in reasons are in Italian or English; the UI translations into Japanese, Chinese and Russian still need a native speaker's review.
