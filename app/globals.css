@@ -5,17 +5,18 @@
   --font-mono: var(--font-geist-mono);
 }
 
-/* Trattoria palette: warm paper and dark ink; basil green for every action,
+/* Azzurro palette: warm paper and dark ink; Mediterranean blue for every action,
    terracotta only for headings and the brand, red only for allergens and removals.
+   Blue keeps actions apart from the gate's colours: green would read as "safe".
    Every text pair passes WCAG AA. */
 @theme {
-  --color-paper: #faf7f2;
-  --color-ink: #1c1a17;
-  --color-muted: #5e584f;
-  --color-line: #e6e0d6;
-  --color-primary: #1e5b45;
-  --color-primary-soft: #e4efe9;
-  --color-accent: #a33f1a;
+  --color-paper: #f7f5f0;
+  --color-ink: #172230;
+  --color-muted: #56606c;
+  --color-line: #e1ddd5;
+  --color-primary: #1d4f8c;
+  --color-primary-soft: #e4ecf7;
+  --color-accent: #b0461c;
   --color-danger: #b42318;
 }
 
