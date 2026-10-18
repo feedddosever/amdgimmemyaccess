@@ -79,6 +79,18 @@ async function main() {
     process.exit(1);
   }
   console.log(`Endpoint: ${cfg.baseURL}`);
+  // The key's shape only, never its value: Token Factory keys are "rc-" plus 48 hex characters.
+  const key = cfg.apiKey;
+  console.log(
+    `Key format: ${key.length} characters, ${key.startsWith("rc-") ? "starts with rc-" : "does not start with rc-"}` +
+      `${/^rc-[0-9a-f]{48}$/i.test(key) ? ", matches rc- + 48 hex" : ""}${/[\s"'`]/.test(key) ? ", contains spaces or quotes" : ""}`,
+  );
+  try {
+    const usage = await fetch(`${cfg.baseURL}/usage`, { headers: { Authorization: `Bearer ${key}` }, signal: AbortSignal.timeout(15_000) });
+    console.log(`Usage endpoint: HTTP ${usage.status}: ${(await usage.text()).replace(/\s+/g, " ").slice(0, 300)}`);
+  } catch (error) {
+    console.log(`Usage endpoint: no response (${error instanceof Error ? error.message : error})`);
+  }
   const models = await listModels(cfg.baseURL, cfg.apiKey);
   // Some gateways list their models without checking the key: the chat requests below are the real test.
   console.log(`Model list loaded: ${models.length} models.`);
