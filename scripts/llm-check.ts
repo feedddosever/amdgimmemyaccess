@@ -132,8 +132,12 @@ async function main() {
     console.error("\nNo request through the app reached the model; the app served its safe fallback. See the raw requests above for the endpoint's error.");
     process.exit(1);
   }
-  if (live < calls.length || view.unavailable) {
-    console.error(`\n${calls.length - live} of ${calls.length} calls did not come live from the model. Fix that before going live.`);
+  const problems: string[] = [];
+  if (live < calls.length) problems.push(`${calls.length - live} of ${calls.length} answers did not come live from the model`);
+  if (view.unavailable) problems.push("part of the menu was not written in time, so the app showed the restaurant's Italian text there");
+  if (!meta) problems.push("the order did not reach the model");
+  if (problems.length > 0) {
+    console.error(`\nNot ready: ${problems.join("; ")}.`);
     process.exit(1);
   }
   console.log(`\nAll ${calls.length} calls came live from ${cfg.model}. Set the same values on Vercel with MOCK_LLM=0.`);
