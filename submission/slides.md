@@ -1,6 +1,6 @@
 # MenuBridge slides
 
-Ten slides. Fill every double-bracket placeholder from `bench/results.md`, the AMD panel and the pilot before exporting to PDF; `npm run check-submission` lists them. The images are in `assets/`; retake them with `npm run screenshots -- <url>` once the live model answers.
+Ten slides. Fill in your name and the video link on slide 10 before exporting to PDF; `npm run check-submission` lists them. The images are in `assets/`, taken from the demo running on canned answers (`MOCK_LLM=1`); retake them with `npm run screenshots -- <url>` once a GPU is connected.
 
 ## 1. MenuBridge
 
@@ -8,7 +8,7 @@ Order in your language. The kitchen gets it in theirs.
 
 ![QR code for table 7](assets/qr-menu.png) · https://menubridge-nine.vercel.app
 
-> Speaker notes: MenuBridge is a QR menu that rewrites itself for each diner and sends the kitchen a ticket in Italian. Everything you will see runs live on one AMD Instinct MI300X.
+> Speaker notes: MenuBridge is a QR menu that rewrites itself for each diner and sends the kitchen a ticket in Italian. The demo you will see runs on saved canned answers: it is built for Gemma 4 on one AMD Instinct MI300X, and no GPU was connected in time.
 
 ## 2. The problem
 
@@ -31,7 +31,9 @@ The menu is written for the person holding it: a first-timer gets what it is and
 
 Diagram: diner → app → Gemma 4 on MI300X → allergen and diet check (fixed rules) → Italian kitchen ticket; the ingredient sheet feeds the check.
 
-> Speaker notes: The diner orders in their own words. Gemma maps that to dish IDs and translates notes; then deterministic code checks every dish against the owner-approved ingredient sheet before anything reaches the kitchen.
+After the order, **My meals** keeps a private record on the phone of every dish, its ingredients and allergens, for a doctor.
+
+> Speaker notes: The diner orders in their own words. Gemma maps that to dish IDs and translates notes; then deterministic code checks every dish against the owner-approved ingredient sheet before anything reaches the kitchen. My meals is built from the same sheet, never from the model: dish, ingredients and allergens in the diner's language and in Italian, so someone with an allergy or coeliac disease can show a doctor exactly what they ate. It says it is not medical advice.
 
 ## 5. What the AI does, and never does
 
@@ -46,40 +48,40 @@ Diagram: diner → app → Gemma 4 on MI300X → allergen and diet check (fixed 
 
 ## 6. Built on AMD
 
-- Gemma 4 26B-A4B (mixture of experts, about 4B active parameters) on one AMD Instinct MI300X, 192 GB
-- vLLM on ROCm, JSON-schema constrained output
-- [[Benchmark table from bench/results.md: concurrency 1, 8, 32, 64 with tokens/s and p50/p95]]
-- [[EUR per menu view and EUR per order at concurrency 32]]
-- [[rocm-smi screenshot taken during a request]]
+- Built for Gemma 4 26B-A4B (mixture of experts, about 4B active parameters) on one AMD Instinct MI300X, 192 GB
+- vLLM on ROCm, OpenAI-compatible endpoint with JSON-schema constrained output; connecting it takes three env vars
+- The AMD panel (`/metrics` and the drawer) shows model, latency, tokens/s and cost for every call; with canned answers it shows "mock"
+- `npm run bench` (1, 8, 32 and 64 concurrent requests) and `npm run warm-cache` are ready; they were not run because no GPU was connected in time, so there are no benchmark numbers yet
 
-> Speaker notes: One GPU serves [[output tokens/s at concurrency 32]] tokens per second at realistic load. A full diner experience, a menu and an order, costs [[EUR per diner]] of GPU time.
+> Speaker notes: This slide has no measured numbers on purpose. The AMD Developer Cloud MI300X server was not set up in time and the Token Factory key was rejected, so the demo runs on canned answers. Everything that talks to the GPU is built and waiting: point the three env vars at vLLM, run the benchmark, and the panel measures every call.
 
 ## 7. Track compliance
 
 - **Created:** a personal menu, an order, an Italian kitchen ticket
 - **Model generates:** explanations, dish mapping, translated notes
 - **Quality control:** fixed-rule gate, dish-ID enums, zod validation, claim guard, owner approval, waiter confirmation, AI labels
-- **Cost per experience:** [[EUR per diner from the benchmark]]
+- **Cost per experience:** measured per call in the AMD panel once a GPU is connected
 - **Who pays:** the restaurant, monthly subscription
 
-> Speaker notes: All of this is also on the About page of the live app, with live counters from the AMD panel.
+> Speaker notes: All of this is also on the About page of the demo app. The cost per diner will come from the AMD panel once a GPU is connected; we show no number until it is measured.
 
 ## 8. Business and pilot
 
 - The restaurant pays a monthly subscription; we will test €29 a month with the pilot.
 - Measurable gain: staff minutes per foreign table, order mistakes, allergen questions answered without staff.
-- [[Pilot restaurant's name and quote]] · [[Photo of the signed letter of intent]]
+- We are looking for a pilot trattoria in Rome.
 
-> Speaker notes: [[One sentence from the owner, for example how often staff explain dishes to foreign tables.]]
+> Speaker notes: We have no pilot yet. We are based in Rome and are looking for a pilot trattoria there, to measure staff minutes per foreign table and order mistakes before and after MenuBridge.
 
 ## 9. Roadmap
 
 - Till (POS) integration, so tickets go straight to the kitchen printer
 - Payments at the table
 - More cities and cuisines, owner-run menu import
-- IMMENT incubation: [[one line on what incubation would unlock]]
+- Export My meals as a PDF for a doctor
+- IMMENT incubation: incubation would fund the first paid pilots in Rome
 
-> Speaker notes: The menu import already works: paste a printed menu, the owner approves the draft, and the restaurant is live.
+> Speaker notes: The menu import is built: paste a printed menu, the model drafts the ingredient sheet, the owner approves it, and the restaurant is ready. Like the rest of the demo, it runs on canned answers until a GPU is connected.
 
 ## 10. Thanks
 

@@ -1,1 +1,1 @@
-MenuBridge turns any restaurant menu into a personal one: diners read and order in their own language, fixed rules block dishes that clash with their allergies or diet, and the kitchen gets a ticket in Italian. Gemma 4 runs on an AMD MI300X.
+MenuBridge turns any restaurant menu into a personal one: diners read and order in their own language, fixed rules block dishes that clash with their allergies or diet, and the kitchen gets a ticket in Italian. Gemma 4 is built to run on an AMD MI300X.

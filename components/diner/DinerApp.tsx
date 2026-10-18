@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import DishCard from "@/components/diner/DishCard";
 import OrderBox from "@/components/diner/OrderBox";
@@ -10,6 +11,7 @@ import { formatCost, formatLatency } from "@/lib/format";
 import { partitionMenu } from "@/lib/gate";
 import { LANGS, LANG_NAMES, formatReason, t } from "@/lib/i18n";
 import type { LLMMeta } from "@/lib/llm";
+import { buildMeal, storeMeal } from "@/lib/meals";
 import type { OrderLine, OrderResult } from "@/lib/order";
 import type { MenuMeta, PersonalizeResponse } from "@/lib/personalize";
 import { browserLang, loadStoredProfile, profileFromParams, saveProfile } from "@/lib/profile";
@@ -155,6 +157,8 @@ export default function DinerApp({ menu }: { menu: Menu }) {
     if (ticket.items.length === 0) return;
     storeTicket(ticket);
     publish({ type: "ticket", ticket });
+    // The diner's own record for a doctor, from the same gated lines as the ticket.
+    storeMeal(buildMeal({ menu, profile, lines: cart, table, mealId: ticket.ticketId, createdAt: ticket.createdAt }));
     setSent((existing) => [{ ticketId: ticket.ticketId, status: ticket.status }, ...existing]);
     setCart([]);
     setLastOrder(null);
@@ -167,7 +171,12 @@ export default function DinerApp({ menu }: { menu: Menu }) {
       <header className="sticky top-0 z-20 flex items-center justify-between gap-3 border-b border-line bg-paper/95 px-4 py-3 backdrop-blur">
         <div>
           <h1 className="text-lg font-semibold leading-tight">{menu.restaurant.name}</h1>
-          <p className="text-sm text-muted">{t(lang, "table", { table })}</p>
+          <p className="text-sm text-muted">
+            {t(lang, "table", { table })} ·{" "}
+            <Link href={`/m/${menu.restaurant.id}/meals?lang=${lang}`} className="inline-flex min-h-6 items-center font-medium text-primary underline">
+              {t(lang, "mealsLink")}
+            </Link>
+          </p>
         </div>
         <button
           type="button"
@@ -230,6 +239,14 @@ export default function DinerApp({ menu }: { menu: Menu }) {
             {t(lang, `status_${ticket.status}`)}
           </p>
         ))}
+        {sent.length > 0 ? (
+          <Link
+            href={`/m/${menu.restaurant.id}/meals?lang=${lang}`}
+            className="inline-flex min-h-11 items-center self-start rounded-full bg-white px-4 font-medium text-primary ring-1 ring-line"
+          >
+            {t(lang, "mealsSaved")} →
+          </Link>
+        ) : null}
 
         {footerMeta?.servedFrom === "cache" && (
           <p className="rounded-xl bg-ink p-3 text-sm text-white" lang="en">

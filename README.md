@@ -2,15 +2,16 @@
 
 **Order in your language. The kitchen gets it in theirs.**
 
-MenuBridge is a QR menu that rewrites itself for each diner. A tourist scans the code at the table, picks a language and any allergies or diet, and reads a menu written for them: what each dish is, how it is eaten, why Romans care. They order in their own words, typed or spoken. Any dish that clashes with their allergies or diet is removed by fixed rules built from the restaurant's own ingredient sheet, with the reason in their language and safe alternatives. The kitchen gets a clean ticket in Italian, and a waiter confirms it at the table. Gemma 4 does all the language work on an AMD Instinct MI300X; it never decides what is safe.
+MenuBridge is a QR menu that rewrites itself for each diner. A tourist scans the code at the table, picks a language and any allergies or diet, and reads a menu written for them: what each dish is, how it is eaten, why Romans care. They order in their own words, typed or spoken. Any dish that clashes with their allergies or diet is removed by fixed rules built from the restaurant's own ingredient sheet, with the reason in their language and safe alternatives. The kitchen gets a clean ticket in Italian, and a waiter confirms it at the table. Gemma 4 is built to do all the language work on an AMD Instinct MI300X; it never decides what is safe.
 
 Built for the AMD Developer Hackathon ACT III (lablab.ai), track **Create a New Kind of Experience**.
 
 ## Demo
 
-- Live demo: **https://menubridge-nine.vercel.app** (mock answers until the GPU droplet is connected)
+- Live demo: **https://menubridge-nine.vercel.app**. It runs on canned answers (`MOCK_LLM=1`) until a GPU is connected: no live model is connected yet, and the AMD panel marks every call "mock".
 - Video: **[add the video link]**
 - Try it: `/m/demo-trattoria?lang=ja&aud=first_timer` (Japanese first-timer), `/m/demo-trattoria?lang=en&aud=dietary&allergens=fish` (fish allergy), `/kitchen`, `/demo` (phone and kitchen side by side), `/metrics` (AMD panel), `/about` (how it works and track compliance).
+- My meals: after a diner sends an order, the phone keeps a private meal record in the browser at `/m/demo-trattoria/meals` (or "My meals" in the menu header): every dish, its ingredients and its allergens, in the diner's language and in Italian, so a diner with a food allergy or coeliac disease can show a doctor exactly what they ate. It is built only from the owner-approved ingredient sheet, never from the AI, and says it is not medical advice.
 
 ## How it works
 
@@ -93,6 +94,7 @@ To add a restaurant: open `/admin/import`, paste its Italian menu, check the dra
 
 ## Limitations
 
+- No live model is connected yet: the AMD Developer Cloud MI300X server was not set up in time and the Token Factory key was rejected. The deployed demo runs with `MOCK_LLM=1` on canned answers, and `npm run bench` and `npm run warm-cache` are ready but have not been run, so there are no benchmark numbers.
 - The demo menu uses typical Roman recipes, not a real restaurant's ingredient sheet; each restaurant approves its own.
 - Orders and tickets live in the browser (BroadcastChannel and localStorage), so the diner and the kitchen must share a browser; a real deployment needs a server-side order store.
 - Ingredient names in reasons are in Italian or English; the UI translations into Japanese, Chinese and Russian still need a native speaker's review.
